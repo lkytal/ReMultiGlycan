@@ -1,0 +1,23 @@
+﻿1.       I suggest you use Hex, HexNAc and deHex
+
+2.       You need to have the penta saccharide as the core (HexNacHexNAc(Hex)3)
+
+3.       Next you can have a Hex attached to any antenna as long as there is no HexNAc molecules, if there are see role 9.
+
+4.       If you have a HexNAc it has to be attached to the core before anything else is attached to it.  Attachment of HexNAc to the core can be on any of the three Hex present in the core
+
+5.       Once HexNAc is added to the core you can only have another Hex and deHex attached to it, but you cannot have a HexNAc.  
+
+6.       Sialic acid only attach to terminal Hex.
+
+7.       In some rare cases sialic acid can be attached to HexNAc, but that when all the terminal Hex are occupied
+
+8.       deHex can be attached wither to core HexNAc (1st HexNAc) or any of the non-reducing end HexNAc)
+
+9.       If the number of Hex other then the core is greater than HexNAc molecules, then this is a hybride structure.  Attach Hex to HexNAc and the additional Hex will be attached to each other on a separate antenna.
+
+10.   You can have a max of 4 antenna.  Any additional HexNAcHex will be a repeated unit attached to any of the four antennas.  This is true when the number of Hex=HexNAc (other than the core penta saccharide)
+
+ 
+These roles should cover all known structures.
+ 
