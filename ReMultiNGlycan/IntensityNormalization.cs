@@ -1,6 +1,7 @@
 ﻿using CSMSL.Chemistry;
 using CSMSL.Spectral;
 using System.Linq;
+using IsotopeDistribution;
 
 namespace COL.MultiGlycan
 {
@@ -35,7 +36,9 @@ namespace COL.MultiGlycan
 			{
 				MonoChemFormula.Add("N", argCompond.Nitrogen);
 			}
-			IsotopicDistribution ID = new IsotopicDistribution();
+			
+			var ID = new IsotopicDistribution.Normalization();
+
 			MZPeak[] Peaks = ID.CalculateDistribuition(MonoChemFormula, 7, IsotopicDistribution.Normalization.BasePeak).GetPeaks().ToArray();
 			double[] isotopeRatio = new double[7];
 			for (int i = 0; i < 7; i++)

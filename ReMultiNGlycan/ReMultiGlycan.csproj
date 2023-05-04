@@ -103,10 +103,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSMSL">
-      <HintPath>..\..\lib\CSMSL.dll</HintPath>
-    </Reference>
-    <Reference Include="ElutionViewer">
-      <HintPath>..\..\lib\ElutionViewer.dll</HintPath>
+      <HintPath>..\lib\CSMSL.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus, Version=6.2.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.6.2.3\lib\net462\EPPlus.dll</HintPath>
@@ -117,19 +114,10 @@
     <Reference Include="EPPlus.System.Drawing, Version=6.1.1.0, Culture=neutral, PublicKeyToken=2308d35469c9bac0, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.System.Drawing.6.1.1\lib\net462\EPPlus.System.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="GlycoLib">
-      <HintPath>..\..\lib\GlycoLib.dll</HintPath>
-    </Reference>
-    <Reference Include="MassLib">
-      <HintPath>..\..\lib\MassLib.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="ProtLib">
-      <HintPath>..\..\lib\ProtLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -141,8 +129,11 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
+    <Reference Include="TheoreticalDistribution">
+      <HintPath>..\lib\TheoreticalDistribution.dll</HintPath>
+    </Reference>
     <Reference Include="ThermoFisher.CommonCore.Data">
-      <HintPath>..\..\..\COL_Lib\lib\ThermoFisher.CommonCore.Data.dll</HintPath>
+      <HintPath>..\lib\ThermoFisher.CommonCore.Data.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -290,10 +281,28 @@
     <EmbeddedResource Include="Resources\Default_Combination.csv" />
     <None Include="Resources\Peak-01.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ElutionViewer\ElutionViewer.csproj">
+      <Project>{9911254b-f7d5-426f-ad5a-1a786572a349}</Project>
+      <Name>ElutionViewer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GlycoLib\GlycoLib.csproj">
+      <Project>{f491280e-32de-4ec8-97ad-bebb8eef8722}</Project>
+      <Name>GlycoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MassLibNative\MassLibNative.csproj">
+      <Project>{f8908c89-4077-49c6-b342-e06e1016d40b}</Project>
+      <Name>MassLibNative</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prot_Lib\ProtLib.csproj">
+      <Project>{c35dfa3f-cb11-41fb-80c6-a49231d2b413}</Project>
+      <Name>ProtLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
