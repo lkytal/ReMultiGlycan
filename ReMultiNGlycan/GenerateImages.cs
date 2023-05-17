@@ -12,7 +12,7 @@ namespace COL.MultiGlycan
 {
 	public static class GenerateImages
 	{
-		private static int MaxDegreeParallelism = 8;
+		private static readonly int MaxDegreeParallelism = 8;
 
 		public static void GenGlycanLcImg(MultiGlycanESI argMultiGlycanESI)
 		{
@@ -21,9 +21,9 @@ namespace COL.MultiGlycan
 			{
 				Directory.CreateDirectory(dir);
 			}
-			List<Color> LstColor = new List<Color>() { Color.DarkCyan, Color.DarkGoldenrod, Color.DarkGray, Color.DarkGreen, Color.DarkKhaki, Color.DarkMagenta, Color.DarkOliveGreen, Color.DarkOrchid, Color.DarkRed, Color.DarkSalmon, Color.DarkSeaGreen, Color.DarkSlateBlue, Color.DarkSlateGray, Color.DarkTurquoise, Color.DarkViolet, Color.DeepPink, Color.DeepSkyBlue };
-			Dictionary<string, List<ClusteredPeak>> dictCluster = new Dictionary<string, List<ClusteredPeak>>();
-			foreach (ClusteredPeak clsPeak in argMultiGlycanESI.MergedResultList)
+			var LstColor = new List<Color>() { Color.DarkCyan, Color.DarkGoldenrod, Color.DarkGray, Color.DarkGreen, Color.DarkKhaki, Color.DarkMagenta, Color.DarkOliveGreen, Color.DarkOrchid, Color.DarkRed, Color.DarkSalmon, Color.DarkSeaGreen, Color.DarkSlateBlue, Color.DarkSlateGray, Color.DarkTurquoise, Color.DarkViolet, Color.DeepPink, Color.DeepSkyBlue };
+			var dictCluster = new Dictionary<string, List<ClusteredPeak>>();
+			foreach (var clsPeak in argMultiGlycanESI.MergedResultList)
 			{
 				string Key = clsPeak.GlycanKey;
 				if (argMultiGlycanESI.LabelingMethod != enumGlycanLabelingMethod.None)
@@ -42,15 +42,15 @@ namespace COL.MultiGlycan
 				string ProcessingGlycanKey = "";
 				try
 				{
-					Dictionary<string, List<LCPointPair>> dictAdductPoints = new Dictionary<string, List<LCPointPair>>();
-					Dictionary<float, float> MergeIntensity = new Dictionary<float, float>();
-					List<float> Time = new List<float>();
+					var dictAdductPoints = new Dictionary<string, List<LCPointPair>>();
+					var MergeIntensity = new Dictionary<float, float>();
+					var Time = new List<float>();
 					float maxIntensity = 0;
-					List<Tuple<double, double>> lstPeakMargin = new List<Tuple<double, double>>();
-					foreach (ClusteredPeak clsPeak in dictCluster[Gkey])
+					var lstPeakMargin = new List<Tuple<double, double>>();
+					foreach (var clsPeak in dictCluster[Gkey])
 					{
 						lstPeakMargin.Add(new Tuple<double, double>(clsPeak.StartTime, clsPeak.EndTime));
-						foreach (MatchedGlycanPeak Peak in clsPeak.MatchedPeaksInScan)
+						foreach (var Peak in clsPeak.MatchedPeaksInScan)
 						{
 							if (!dictAdductPoints.ContainsKey(Peak.AdductString))
 							{
@@ -77,7 +77,7 @@ namespace COL.MultiGlycan
 
 					#region LC Images
 
-					using (Chart cht = new Chart())
+					using (var cht = new Chart())
 					{
 						//---------------Generate Graph-----------------
 						ProcessingGlycanKey = Gkey;
@@ -113,7 +113,7 @@ namespace COL.MultiGlycan
 						foreach (string Adduct in dictAdductPoints.Keys)
 						{
 							dictAdductPoints[Adduct].OrderBy(x => x.Time); //Sort by time
-							Series series = cht.Series.Add(Adduct);
+							var series = cht.Series.Add(Adduct);
 							series.ChartArea = "Default";
 							series.ChartType = SeriesChartType.Spline;
 							series.MarkerStyle = MarkerStyle.Circle;
@@ -121,7 +121,7 @@ namespace COL.MultiGlycan
 							series.BorderWidth = 2;
 							series.Color = LstColor[ColorIdx];
 
-							foreach (LCPointPair pp in dictAdductPoints[Adduct])
+							foreach (var pp in dictAdductPoints[Adduct])
 							{
 								float TimeKey = Convert.ToSingle(pp.Time.ToString("0.00"));
 								if (series.Points.Where(x => x.XValue == TimeKey).Count() != 0)
@@ -138,13 +138,13 @@ namespace COL.MultiGlycan
 						}
 						//Merge Intensity
 						Time.Sort();
-						List<LCPointPair> PPLMerge = new List<LCPointPair>();
+						var PPLMerge = new List<LCPointPair>();
 						foreach (float tim in Time)
 						{
 							PPLMerge.Add(new LCPointPair(Convert.ToSingle(tim.ToString("0.00")), MergeIntensity[tim]));
 						}
 
-						Series merge = cht.Series.Add("Merge");
+						var merge = cht.Series.Add("Merge");
 						merge.ChartArea = "Default";
 						merge.ChartType = SeriesChartType.Spline;
 						merge.BorderWidth = 2;
@@ -152,7 +152,7 @@ namespace COL.MultiGlycan
 						merge.MarkerSize = 15;
 						merge.Color = Color.Black;
 						merge.BorderDashStyle = ChartDashStyle.Dot;
-						foreach (LCPointPair pp in PPLMerge)
+						foreach (var pp in PPLMerge)
 						{
 							merge.Points.AddXY(pp.Time, pp.Intensity);
 						}
@@ -164,7 +164,7 @@ namespace COL.MultiGlycan
 				}
 				catch (Exception ex)
 				{
-					throw new Exception("GetLC Pic failed " + ProcessingGlycanKey + "  Err Msg:" + ex.ToString());
+					throw new Exception("GetLC Pic failed " + ProcessingGlycanKey + "  Err Msg:" + ex);
 				}
 			}//);
 		}
@@ -176,12 +176,12 @@ namespace COL.MultiGlycan
 			{
 				Directory.CreateDirectory(Dir);
 			}
-			List<Color> LstColor = new List<Color>() { Color.DarkCyan, Color.DarkGoldenrod, Color.DarkGray, Color.DarkGreen, Color.DarkKhaki, Color.DarkMagenta, Color.DarkOliveGreen, Color.DarkOrchid, Color.DarkRed, Color.DarkSalmon, Color.DarkSeaGreen, Color.DarkSlateBlue, Color.DarkSlateGray, Color.DarkTurquoise, Color.DarkViolet, Color.DeepPink, Color.DeepSkyBlue };
+			var LstColor = new List<Color>() { Color.DarkCyan, Color.DarkGoldenrod, Color.DarkGray, Color.DarkGreen, Color.DarkKhaki, Color.DarkMagenta, Color.DarkOliveGreen, Color.DarkOrchid, Color.DarkRed, Color.DarkSalmon, Color.DarkSeaGreen, Color.DarkSlateBlue, Color.DarkSlateGray, Color.DarkTurquoise, Color.DarkViolet, Color.DeepPink, Color.DeepSkyBlue };
 			//List<ZedGraph.SymbolType> LstSymbol = new List<ZedGraph.SymbolType>() { SymbolType.Circle, SymbolType.Triangle, SymbolType.TriangleDown, SymbolType.XCross, SymbolType.Diamond, SymbolType.Plus, SymbolType.Square, SymbolType.Star, SymbolType.VDash };
 
 			//Get Title
-			Dictionary<string, int> dictTitle = new Dictionary<string, int>();
-			StreamReader sr = new StreamReader(argAllFile);
+			var dictTitle = new Dictionary<string, int>();
+			var sr = new StreamReader(argAllFile);
 			string tmp = "";
 			bool isLabeling = false;
 			tmp = sr.ReadLine();
@@ -193,7 +193,7 @@ namespace COL.MultiGlycan
 			{
 				isLabeling = true;
 			}
-			Dictionary<string, Dictionary<string, Dictionary<float, float>>> dictData =
+			var dictData =
 				new Dictionary<string, Dictionary<string, Dictionary<float, float>>>();
 			//                Key-Label_Tag,      Adduct                      time    , intensity
 			do
@@ -243,15 +243,15 @@ namespace COL.MultiGlycan
 
 			#region Get Data
 
-			List<string> imgErrorMsg = new List<string>();
+			var imgErrorMsg = new List<string>();
 			//foreach (string Gkey in dictData.Keys)
 			Parallel.ForEach(dictData.Keys, new ParallelOptions() { MaxDegreeOfParallelism = MaxDegreeParallelism }, Gkey =>
 			{
 				try
 				{
-					Dictionary<string, List<LCPointPair>> dictAdductPoints = new Dictionary<string, List<LCPointPair>>();
-					Dictionary<float, float> MergeIntensity = new Dictionary<float, float>();
-					List<float> Time = new List<float>();
+					var dictAdductPoints = new Dictionary<string, List<LCPointPair>>();
+					var MergeIntensity = new Dictionary<float, float>();
+					var Time = new List<float>();
 
 					foreach (string adductKey in dictData[Gkey].Keys)
 					{
@@ -282,7 +282,7 @@ namespace COL.MultiGlycan
 
 					#region LC Images
 
-					using (Chart cht = new Chart())
+					using (var cht = new Chart())
 					{
 						ProcessingGlycanKey = Gkey;
 
@@ -317,9 +317,9 @@ namespace COL.MultiGlycan
 						foreach (string Adduct in dictAdductPoints.Keys)
 						{
 							dictAdductPoints[Adduct].OrderBy(x => x.Time);
-							List<double> Times = new List<double>();
-							List<double> Intensities = new List<double>();
-							foreach (LCPointPair pp in dictAdductPoints[Adduct])
+							var Times = new List<double>();
+							var Intensities = new List<double>();
+							foreach (var pp in dictAdductPoints[Adduct])
 							{
 								if (Times.Contains(pp.Time))
 								{
@@ -332,7 +332,7 @@ namespace COL.MultiGlycan
 									Intensities.Add(pp.Intensity);
 								}
 							}
-							Series series = cht.Series.Add(Adduct);
+							var series = cht.Series.Add(Adduct);
 							series.ChartArea = "Default";
 							series.ChartType = SeriesChartType.Spline;
 							series.MarkerStyle = MarkerStyle.Circle;
@@ -348,12 +348,12 @@ namespace COL.MultiGlycan
 						}
 						//Merge Intensity
 						Time.Sort();
-						List<LCPointPair> PPLMerge = new List<LCPointPair>();
+						var PPLMerge = new List<LCPointPair>();
 						foreach (float tim in Time)
 						{
 							PPLMerge.Add(new LCPointPair(Convert.ToSingle(tim.ToString("0.00")), MergeIntensity[tim]));
 						}
-						Series merge = cht.Series.Add("Merge");
+						var merge = cht.Series.Add("Merge");
 						merge.ChartArea = "Default";
 						merge.ChartType = SeriesChartType.Spline;
 						merge.BorderWidth = 2;
@@ -361,7 +361,7 @@ namespace COL.MultiGlycan
 						merge.MarkerStyle = MarkerStyle.Diamond;
 						merge.MarkerSize = 15;
 
-						foreach (LCPointPair pp in PPLMerge)
+						foreach (var pp in PPLMerge)
 						{
 							merge.Points.AddXY(pp.Time, pp.Intensity);
 						}
@@ -377,7 +377,7 @@ namespace COL.MultiGlycan
 					var frame = st.GetFrame(0);
 					// Get the line number from the stack frame
 					var line = frame.GetFileLineNumber();
-					imgErrorMsg.Add("GetLC Pic failed " + Dir + "\\" + ProcessingGlycanKey + "  @ " + line + "  Err Msg:" + ex.ToString());
+					imgErrorMsg.Add("GetLC Pic failed " + Dir + "\\" + ProcessingGlycanKey + "  @ " + line + "  Err Msg:" + ex);
 				}
 			});
 			errorMsgs = imgErrorMsg;
@@ -392,7 +392,7 @@ namespace COL.MultiGlycan
 				Directory.CreateDirectory(Dir);
 			}
 
-			List<Color> LstColor = new List<Color>()
+			var LstColor = new List<Color>()
 			{
 				Color.DarkCyan,
 				Color.DarkGoldenrod,
@@ -415,8 +415,8 @@ namespace COL.MultiGlycan
 
 			//Get Title
 
-			Dictionary<string, int> dictTitle = new Dictionary<string, int>();
-			StreamReader sr = new StreamReader(argQuantFile);
+			var dictTitle = new Dictionary<string, int>();
+			var sr = new StreamReader(argQuantFile);
 			string tmp = "";
 			//bool isLabeling = false;
 			tmp = sr.ReadLine();
@@ -426,7 +426,7 @@ namespace COL.MultiGlycan
 			string[] tmpAry = tmp.Split(',');
 			//string LabelTitle = "";
 			dictTitle.Add("Glycan", 0);
-			List<string> lstLabelingTag = new List<string>();
+			var lstLabelingTag = new List<string>();
 			if (argLabelingMethod == enumGlycanLabelingMethod.DRAG)
 			{
 				lstLabelingTag.Add("DRAG_Light(Adjusted 1)");
@@ -463,7 +463,7 @@ namespace COL.MultiGlycan
 
 			#region Get Data
 
-			Dictionary<string, Dictionary<string, double>> dictData =
+			var dictData =
 				new Dictionary<string, Dictionary<string, double>>();
 			while (!sr.EndOfStream)
 			{
@@ -504,7 +504,7 @@ namespace COL.MultiGlycan
 				//ZedGraphControl zgcGlycan = null;
 				try
 				{
-					Chart cht = new Chart();
+					var cht = new Chart();
 					cht.Size = new Size(2400, 1200);
 
 					cht.ChartAreas.Add("Default");
@@ -529,11 +529,11 @@ namespace COL.MultiGlycan
 					cht.Legends["Default"].LegendStyle = LegendStyle.Row;
 					cht.Legends["Default"].Font = new Font("Arial", 24, FontStyle.Bold);
 
-					Dictionary<enumLabelingTag, double> dictLabelIntensity = new Dictionary<enumLabelingTag, double>();
+					var dictLabelIntensity = new Dictionary<enumLabelingTag, double>();
 					double YMax = dictData[Gkey].Values.Max();
 
-					List<string> labels = new List<string>();
-					List<LCPointPair> ppl = new List<LCPointPair>();
+					var labels = new List<string>();
+					var ppl = new List<LCPointPair>();
 
 					int i = 0;
 					foreach (string labelTag in lstLabelingTag)
@@ -549,7 +549,7 @@ namespace COL.MultiGlycan
 						}
 						i++;
 					}
-					Series myBar = cht.Series.Add("Data");
+					var myBar = cht.Series.Add("Data");
 					myBar.ChartType = SeriesChartType.Bar;
 					for (int j = 0; j < ppl.Count; j++)
 					{

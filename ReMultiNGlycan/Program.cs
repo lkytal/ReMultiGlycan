@@ -32,9 +32,12 @@ namespace COL.MultiGlycan
 				Stream Out = assembly.GetManifestResourceStream("COL.MultiGlycan.Resources.Default_Combination.csv");
 				Stream inStream = new FileStream(Environment.CurrentDirectory + "\\Default_Combination.csv",
 					FileMode.Create);
-				Out.CopyTo(inStream);
-				inStream.Close();
-				Out.Close();
+				if (Out != null)
+				{
+					Out.CopyTo(inStream);
+					inStream.Close();
+					Out.Close();
+				}
 			}
 			Application.Run(new frmMainESI());
 		}

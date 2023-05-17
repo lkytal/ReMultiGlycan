@@ -13,13 +13,13 @@ namespace COL.MultiGlycan
 		{
 			try
 			{
-				List<string> identifiedGlycan = argMultiGlycan.IdentifiedGlycanCompounds.Select(x => x.GlycanKey).Distinct().ToList();
-				Dictionary<string, List<int>> dictGlycanKeySearchRange = new Dictionary<string, List<int>>();
+				var identifiedGlycan = argMultiGlycan.IdentifiedGlycanCompounds.Select(x => x.GlycanKey).Distinct().ToList();
+				var dictGlycanKeySearchRange = new Dictionary<string, List<int>>();
 
 				int LastScan = argMultiGlycan.RawReader.NumberOfScans;
 				foreach (string glycanKey in identifiedGlycan)
 				{
-					List<int> identifedScans =
+					var identifedScans =
 						argMultiGlycan.MatchedPeakInScan.Where(x => x.GlycanComposition.GlycanKey == glycanKey)
 							.Select(y => y.ScanNum)
 							.ToList();
@@ -34,7 +34,7 @@ namespace COL.MultiGlycan
 						{
 							continue;
 						}
-						MSScan s = argMultiGlycan.RawReader.ReadScan(frontEdge);
+						var s = argMultiGlycan.RawReader.ReadScan(frontEdge);
 						if (FirstIdentifiedTime - s.Time > 5)
 						{
 							break;
@@ -50,7 +50,7 @@ namespace COL.MultiGlycan
 						{
 							continue;
 						}
-						MSScan s = argMultiGlycan.RawReader.ReadScan(backEdge);
+						var s = argMultiGlycan.RawReader.ReadScan(backEdge);
 						if (s.Time - LastIdentifedTime > 5)
 						{
 							break;
@@ -59,9 +59,9 @@ namespace COL.MultiGlycan
 					dictGlycanKeySearchRange.Add(glycanKey, new List<int>() { frontEdge, backEdge });
 				}
 
-				List<MSScan> msScans = new List<MSScan>();
+				var msScans = new List<MSScan>();
 				string previousGlycanKey = "";
-				foreach (GlycanCompound g in argMultiGlycan.GlycanList.OrderBy(x => x.GlycanKey))
+				foreach (var g in argMultiGlycan.GlycanList.OrderBy(x => x.GlycanKey))
 				{
 					if (!identifiedGlycan.Contains(g.GlycanKey))
 					{
@@ -79,14 +79,14 @@ namespace COL.MultiGlycan
 
 					//FindPeaks
 					int charge = g.Charge;
-					List<List<MSScan>> scanSectionsContainPeaks = new List<List<MSScan>>();
+					var scanSectionsContainPeaks = new List<List<MSScan>>();
 					for (int i = 0; i < msScans.Count; i++)
 					{
-						MSScan scan = msScans[i];
+						var scan = msScans[i];
 						int closedIdx = MassUtility.GetClosestMassIdx(scan.MZs, (float)g.MZ);
 						if (MassUtility.GetMassPPM(scan.MZs[closedIdx], g.MZ) <= argMultiGlycan.MassPPM)
 						{
-							List<int> peaks = FindPeakIdx(scan.MZs, closedIdx, charge, argMultiGlycan.IsotopePPM);
+							var peaks = FindPeakIdx(scan.MZs, closedIdx, charge, argMultiGlycan.IsotopePPM);
 							if (peaks.Count - peaks.IndexOf(closedIdx) < argMultiGlycan.MininumIsotopePeakCount)
 							{
 								continue;
@@ -94,7 +94,7 @@ namespace COL.MultiGlycan
 							//Found peaks
 							if (scanSectionsContainPeaks.Count > 0)
 							{
-								MSScan lastSectionLastScan = scanSectionsContainPeaks.Last().Last();
+								var lastSectionLastScan = scanSectionsContainPeaks.Last().Last();
 								if (scan.Time - lastSectionLastScan.Time > 2.5)
 								{
 									scanSectionsContainPeaks.Add(new List<MSScan>() { scan });
@@ -113,7 +113,7 @@ namespace COL.MultiGlycan
 
 					//If scans can form an elution profile add to identifed result;
 
-					foreach (List<MSScan> sectionScans in scanSectionsContainPeaks)
+					foreach (var sectionScans in scanSectionsContainPeaks)
 					{
 						if (sectionScans.Count < 3)
 						{
@@ -122,14 +122,14 @@ namespace COL.MultiGlycan
 						else
 						{
 							//Add matched peak
-							foreach (MSScan s in sectionScans)
+							foreach (var s in sectionScans)
 							{
 								int PeakIdx = MassUtility.GetClosestMassIdx(s.MZs, (float)g.MZ);
-								MatchedGlycanPeak mPeak = new MatchedGlycanPeak(s.ScanNo, s.Time, s.MSPeaks[PeakIdx], g);
+								var mPeak = new MatchedGlycanPeak(s.ScanNo, s.Time, s.MSPeaks[PeakIdx], g);
 
-								List<int> peaks = FindPeakIdx(s.MZs, PeakIdx, charge, argMultiGlycan.IsotopePPM);
+								var peaks = FindPeakIdx(s.MZs, PeakIdx, charge, argMultiGlycan.IsotopePPM);
 								int startIdx = peaks.IndexOf(PeakIdx);
-								List<MSPoint> lstIsotopes = new List<MSPoint>();
+								var lstIsotopes = new List<MSPoint>();
 								for (int i = startIdx; i < peaks.Count; i++)
 								{
 									lstIsotopes.Add(new MSPoint(s.MZs[peaks[i]], s.Intensities[peaks[i]]));
@@ -255,7 +255,7 @@ namespace COL.MultiGlycan
 
 		private static List<int> FindPeakIdx(float[] argMZAry, int argTargetIdx, int argCharge, float argIsotopePPM)
 		{
-			List<int> Peak = new List<int>();
+			var Peak = new List<int>();
 			float Interval = 1 / (float)argCharge;
 			float FirstMZ = argMZAry[argTargetIdx];
 			int CurrentIdx = argTargetIdx;
@@ -267,7 +267,7 @@ namespace COL.MultiGlycan
 				{
 					break;
 				}
-				List<int> ClosedPeaks = MassLib.MassUtility.GetClosestMassIdxsWithinPPM(argMZAry, argMZAry[CurrentIdx] - Interval, argIsotopePPM);
+				var ClosedPeaks = MassLib.MassUtility.GetClosestMassIdxsWithinPPM(argMZAry, argMZAry[CurrentIdx] - Interval, argIsotopePPM);
 				if (ClosedPeaks.Count == 1)
 				{
 					CurrentIdx = ClosedPeaks[0];
@@ -297,7 +297,7 @@ namespace COL.MultiGlycan
 				{
 					break;
 				}
-				List<int> ClosedPeaks = MassLib.MassUtility.GetClosestMassIdxsWithinPPM(argMZAry, argMZAry[CurrentIdx] + Interval, argIsotopePPM);
+				var ClosedPeaks = MassLib.MassUtility.GetClosestMassIdxsWithinPPM(argMZAry, argMZAry[CurrentIdx] + Interval, argIsotopePPM);
 				if (ClosedPeaks.Count == 1)
 				{
 					CurrentIdx = ClosedPeaks[0];

@@ -8,8 +8,6 @@ namespace COL.MultiGlycan
 	//[Serializable]
 	public class ClusteredPeak// : ICloneable
 	{
-		private List<MatchedGlycanPeak> _MatchedPeaksInScan;
-		private LCPeak _LCPeak;
 		//private List<MSPoint> _RawPoint;
 		//private float _ApexTime = 0;
 
@@ -26,34 +24,26 @@ namespace COL.MultiGlycan
 
 		public ClusteredPeak()
 		{
-			_MatchedPeaksInScan = new List<MatchedGlycanPeak>();
+			MatchedPeaksInScan = new List<MatchedGlycanPeak>();
 		}
 
 		public ClusteredPeak(MatchedGlycanPeak argMatchedGlycanPeak)
 		{
-			_MatchedPeaksInScan = new List<MatchedGlycanPeak>();
-			_MatchedPeaksInScan.Add(argMatchedGlycanPeak);
+			MatchedPeaksInScan = new List<MatchedGlycanPeak>();
+			MatchedPeaksInScan.Add(argMatchedGlycanPeak);
 		}
 
-		public List<MatchedGlycanPeak> MatchedPeaksInScan
-		{
-			get => _MatchedPeaksInScan;
-			set => _MatchedPeaksInScan = value;
-		}
+		public List<MatchedGlycanPeak> MatchedPeaksInScan { get; set; }
 
-		public LCPeak LCPeak
-		{
-			get => _LCPeak;
-			set => _LCPeak = value;
-		}
+		public LCPeak LCPeak { get; set; }
 
 		public enumLabelingTag LabelingTag
 		{
 			get
 			{
-				if (_MatchedPeaksInScan.Count > 0)
+				if (MatchedPeaksInScan.Count > 0)
 				{
-					return _MatchedPeaksInScan[0].GlycanComposition.LabelingTag;
+					return MatchedPeaksInScan[0].GlycanComposition.LabelingTag;
 				}
 				else
 				{
@@ -70,7 +60,7 @@ namespace COL.MultiGlycan
 			get
 			{
 				double _IsotopicClusterIntensity = 0.0f;
-				foreach (MatchedGlycanPeak P in _MatchedPeaksInScan)
+				foreach (MatchedGlycanPeak P in MatchedPeaksInScan)
 				{
 					_IsotopicClusterIntensity = _IsotopicClusterIntensity + P.Peak.ClusterIntensity;
 				}
@@ -85,14 +75,14 @@ namespace COL.MultiGlycan
 		{
 			get
 			{
-				if (_LCPeak != null)
+				if (LCPeak != null)
 				{
-					return _LCPeak.SumOfIntensity;
+					return LCPeak.SumOfIntensity;
 				}
 				else
 				{
 					double _MostIntenseIntensity = 0;
-					foreach (MatchedGlycanPeak P in _MatchedPeaksInScan)
+					foreach (MatchedGlycanPeak P in MatchedPeaksInScan)
 					{
 						_MostIntenseIntensity = _MostIntenseIntensity + P.Peak.MostIntenseIntensity;
 					}
@@ -106,7 +96,7 @@ namespace COL.MultiGlycan
 			get
 			{
 				double MonotIntenseIntensity = 0;
-				foreach (MatchedGlycanPeak P in _MatchedPeaksInScan)
+				foreach (MatchedGlycanPeak P in MatchedPeaksInScan)
 				{
 					MonotIntenseIntensity = MonotIntenseIntensity + P.Peak.MonoIntensity;
 				}
@@ -123,8 +113,8 @@ namespace COL.MultiGlycan
 		{
 			get
 			{
-				_MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
-				return Math.Round(_MatchedPeaksInScan[0].ScanTime, 5);
+				MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
+				return Math.Round(MatchedPeaksInScan[0].ScanTime, 5);
 			}
 		}
 
@@ -132,15 +122,15 @@ namespace COL.MultiGlycan
 		{
 			get
 			{
-				_MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
-				return Math.Round(_MatchedPeaksInScan[_MatchedPeaksInScan.Count - 1].ScanTime, 5);
+				MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
+				return Math.Round(MatchedPeaksInScan[MatchedPeaksInScan.Count - 1].ScanTime, 5);
 			}
 		}
 
 		public void CalcLCPeak()
 		{
 			List<MSPoint> lstMSPs = new List<MSPoint>();
-			foreach (MatchedGlycanPeak Peak in _MatchedPeaksInScan)
+			foreach (MatchedGlycanPeak Peak in MatchedPeaksInScan)
 			{
 				lstMSPs.Add(new MSPoint(Convert.ToSingle(Math.Round(Peak.ScanTime, 5)), Peak.Peak.MonoIntensity));
 			}
@@ -168,15 +158,15 @@ namespace COL.MultiGlycan
 			{
 				MergedLCPeak = new LCPeak(lstSmoothPnts[0].Mass, lstSmoothPnts[lstSmoothPnts.Count - 1].Mass, lstSmoothPnts);
 			}
-			_LCPeak = MergedLCPeak;
+			LCPeak = MergedLCPeak;
 		}
 
 		public int StartScan
 		{
 			get
 			{
-				_MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
-				return _MatchedPeaksInScan[0].ScanNum;
+				MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
+				return MatchedPeaksInScan[0].ScanNum;
 			}
 		}
 
@@ -184,8 +174,8 @@ namespace COL.MultiGlycan
 		{
 			get
 			{
-				_MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
-				return _MatchedPeaksInScan[_MatchedPeaksInScan.Count - 1].ScanNum;
+				MatchedPeaksInScan.Sort((a, b) => a.ScanNum.CompareTo(b.ScanNum));
+				return MatchedPeaksInScan[MatchedPeaksInScan.Count - 1].ScanNum;
 			}
 		}
 
@@ -206,18 +196,18 @@ namespace COL.MultiGlycan
 		//{
 		//    get { return _MSPeak[0].MonoMass; }
 		//}
-		public GlycanCompound GlycanComposition => _MatchedPeaksInScan[0].GlycanComposition;
+		public GlycanCompound GlycanComposition => MatchedPeaksInScan[0].GlycanComposition;
 
-		public string GlycanKey => _MatchedPeaksInScan[0].GlycanComposition.GlycanKey;
+		public string GlycanKey => MatchedPeaksInScan[0].GlycanComposition.GlycanKey;
 
-		public double TimeInterval => _MatchedPeaksInScan[_MatchedPeaksInScan.Count - 1].ScanTime - _MatchedPeaksInScan[0].ScanTime;
+		public double TimeInterval => MatchedPeaksInScan[MatchedPeaksInScan.Count - 1].ScanTime - MatchedPeaksInScan[0].ScanTime;
 
 		public double PeakArea
 		{
 			get
 			{
 				CalcLCPeak();
-				return _LCPeak.PeakArea;
+				return LCPeak.PeakArea;
 			}
 		}
 

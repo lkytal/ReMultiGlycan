@@ -6,8 +6,8 @@ namespace COL.MultiGlycan
 {
 	internal class QuantitationPeak
 	{
-		private string _glycanKey;
-		private string _dataSetName;
+		private readonly string _glycanKey;
+		private readonly string _dataSetName;
 		private List<Tuple<float, float>> _protonatedPeaks = new List<Tuple<float, float>>();
 		private Dictionary<string, List<Tuple<float, float>>> _otherAdductsPeaks;
 		private int _protonatedApexIdx = -1;

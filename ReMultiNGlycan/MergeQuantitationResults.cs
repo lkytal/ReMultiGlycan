@@ -9,13 +9,13 @@ namespace COL.MultiGlycan
 	{
 		public static void MergeFullList(List<string> argFiles, string argOutputFile, bool argProtonatedResult = false)
 		{
-			List<string> ResultFiles = argFiles;
-			List<string> AllGlycans = new List<string>();
-			Dictionary<string, List<QuantitationPeak>> AllResult = new Dictionary<string, List<QuantitationPeak>>();
+			var ResultFiles = argFiles;
+			var AllGlycans = new List<string>();
+			var AllResult = new Dictionary<string, List<QuantitationPeak>>();
 			for (int i = 0; i < ResultFiles.Count; i++)
 			{
 				//Glycan, Adduct
-				Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> Result = ReadFullResultCSV(ResultFiles[i]);
+				var Result = ReadFullResultCSV(ResultFiles[i]);
 				//Impute data
 
 				ImputationData(Result);
@@ -29,7 +29,7 @@ namespace COL.MultiGlycan
 					{
 						AllResult.Add(glycanKey, new List<QuantitationPeak>());
 					}
-					QuantitationPeak qPeak = new QuantitationPeak(Path.GetFileNameWithoutExtension(ResultFiles[i]).Replace("_FullList", ""), glycanKey);
+					var qPeak = new QuantitationPeak(Path.GetFileNameWithoutExtension(ResultFiles[i]).Replace("_FullList", ""), glycanKey);
 					qPeak.AssignPeaks(Result[glycanKey]);
 
 					if (!AllResult.ContainsKey(glycanKey))
@@ -41,7 +41,7 @@ namespace COL.MultiGlycan
 			}
 
 			//Export File
-			using (StreamWriter sw = new StreamWriter(argOutputFile))
+			using (var sw = new StreamWriter(argOutputFile))
 			{
 				string tmpStr = "";
 				tmpStr = "Glycan,";
@@ -154,7 +154,7 @@ namespace COL.MultiGlycan
 			//Debug
 			if (argProtonatedResult)
 			{
-				StreamWriter swDebug = new StreamWriter(Path.GetDirectoryName(argOutputFile) + "\\MergeResult_Debug.csv");
+				var swDebug = new StreamWriter(Path.GetDirectoryName(argOutputFile) + "\\MergeResult_Debug.csv");
 				string tmpDebugStr = "";
 				tmpDebugStr = "Glycan,";
 				//Title
@@ -200,7 +200,7 @@ namespace COL.MultiGlycan
 
 			try
 			{
-				Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> Result = new Dictionary<string, Dictionary<string, List<Tuple<float, float>>>>();
+				var Result = new Dictionary<string, Dictionary<string, List<Tuple<float, float>>>>();
 				//Key 1: Glycan, Key 2: Adduct
 				sr = new StreamReader(argFile);
 				sr.ReadLine(); // Title
@@ -231,7 +231,7 @@ namespace COL.MultiGlycan
 						Result[GlycanKey].Add(AdductKey, new List<Tuple<float, float>>());
 					}
 
-					List<Tuple<float, float>> sameLCTime = Result[GlycanKey][AdductKey].Where(t => t.Item1 == Convert.ToSingle(tmpAry[0])).ToList();
+					var sameLCTime = Result[GlycanKey][AdductKey].Where(t => t.Item1 == Convert.ToSingle(tmpAry[0])).ToList();
 					if (sameLCTime.Count != 0)
 					{
 						float LCTime = sameLCTime[0].Item1;
@@ -268,8 +268,8 @@ namespace COL.MultiGlycan
 				{
 					continue;
 				}
-				List<Tuple<float, float>> ProtonatedPeak = argResult[GlycanKey]["H"];
-				List<Tuple<float, float>> AddedPeak = new List<Tuple<float, float>>();
+				var ProtonatedPeak = argResult[GlycanKey]["H"];
+				var AddedPeak = new List<Tuple<float, float>>();
 
 				for (int i = 0; i < ProtonatedPeak.Count - 1; i++)
 				{
@@ -298,12 +298,11 @@ namespace COL.MultiGlycan
 			QuantitationPeak processingGlycan = null;
 			try
 			{
-				int minScanCount = 0;
-				List<QuantitationPeak> qPeaks = argQuantPeaks.Where(x => x.ProtonatedPeaks.Count > 0).ToList();
+				var qPeaks = argQuantPeaks.Where(x => x.ProtonatedPeaks.Count > 0).ToList();
 				if (qPeaks.Count > 0)
 				{
-					minScanCount = qPeaks.Min(x => x.ProtonatedPeaks.Count);
-					foreach (QuantitationPeak qPeak in argQuantPeaks)
+					var minScanCount = qPeaks.Min(x => x.ProtonatedPeaks.Count);
+					foreach (var qPeak in argQuantPeaks)
 					{
 						processingGlycan = qPeak;
 						while (qPeak.ProtonatedPeaks.Count > minScanCount)
@@ -328,15 +327,15 @@ namespace COL.MultiGlycan
 
 		public static void MergeConservedList(List<string> argFiles, string argOutputFile)
 		{
-			Dictionary<string, Dictionary<string, double>> dictAllResult = new Dictionary<string, Dictionary<string, double>>(); //Key:File Name,
-			List<string> allGlycansList = new List<string>();
+			var dictAllResult = new Dictionary<string, Dictionary<string, double>>(); //Key:File Name,
+			var allGlycansList = new List<string>();
 			foreach (string f in argFiles)
 			{
-				Dictionary<string, double> dictGlycanIntensity = new Dictionary<string, double>(); //Key:glycan Value:intensity
-				using (StreamReader sr = new StreamReader(f))
+				var dictGlycanIntensity = new Dictionary<string, double>(); //Key:glycan Value:intensity
+				using (var sr = new StreamReader(f))
 				{
 					bool isInSection = false;
-					Dictionary<string, int> dictHeaderMapping = new Dictionary<string, int>(); //Key :Header title Value: index
+					var dictHeaderMapping = new Dictionary<string, int>(); //Key :Header title Value: index
 					while (!sr.EndOfStream)
 					{
 						string tmpLine = sr.ReadLine();
@@ -371,7 +370,7 @@ namespace COL.MultiGlycan
 			}
 
 			//Export
-			using (StreamWriter sw = new StreamWriter(argOutputFile))
+			using (var sw = new StreamWriter(argOutputFile))
 			{
 				//Title
 				string tmpOutput = "Glycan,";
@@ -381,7 +380,7 @@ namespace COL.MultiGlycan
 				}
 				sw.WriteLine(tmpOutput);
 
-				List<double> lstIntensity = new List<double>();
+				var lstIntensity = new List<double>();
 				foreach (string glycanKey in allGlycansList)
 				{
 					tmpOutput = glycanKey + ",";
