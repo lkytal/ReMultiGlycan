@@ -15,6 +15,7 @@ namespace COL.MultiGlycan
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+
 			//string XcaliburKeyX64 = @"CLSID\{1d23188d-53fe-4c25-b032-dc70acdbdc02}\InprocServer32";  //X64
 			////string XcaliburKeyX32 = @"Wow6432Node\CLSID\{1d23188d-53fe-4c25-b032-dc70acdbdc02}\InprocServer32"; //X32
 			//RegistryKey X64 = Registry.ClassesRoot.OpenSubKey(XcaliburKeyX64);

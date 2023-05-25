@@ -38,9 +38,11 @@ namespace COL.MultiGlycan
 
 			IsotopicDistribution ID = new IsotopicDistribution();
 
-			MZPeak[] Peaks = ID.CalculateDistribuition(MonoChemFormula, 7, IsotopicDistribution.Normalization.BasePeak).GetPeaks().ToArray();
-			double[] isotopeRatio = new double[7];
-			for (int i = 0; i < 7; i++)
+			const int topPeaks = 7;
+
+			MZPeak[] Peaks = ID.CalculateDistribuition(MonoChemFormula, topPeaks, IsotopicDistribution.Normalization.BasePeak).GetPeaks().ToArray();
+			double[] isotopeRatio = new double[topPeaks];
+			for (int i = 0; i < topPeaks; i++)
 			{
 				isotopeRatio[i] = Peaks[i].Intensity;
 			}
@@ -50,7 +52,7 @@ namespace COL.MultiGlycan
 			for (int i = 0; i <= 2; i++)
 			{
 				double Ratio = CorrectedIntensities[i] / isotopeRatio[0];
-				for (int j = i; j < 7; j++)
+				for (int j = i; j < topPeaks; j++)
 				{
 					CorrectedIntensities[j] = CorrectedIntensities[j] - (isotopeRatio[j - i] * Ratio);
 				}

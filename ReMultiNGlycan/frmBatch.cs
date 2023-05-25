@@ -19,6 +19,7 @@ namespace COL.MultiGlycan
 			InitializeComponent();
 
 			this.Font = new System.Drawing.Font("Arial", 9);
+			this.StartPosition = FormStartPosition.CenterScreen;
 
 			this.Text = this.Text + "  " + AssemblyVersion.Split('.')[0] + "." + AssemblyVersion.Split('.')[1] + "." + AssemblyVersion.Split('.')[2];// +" (build: " + AssemblyVersion.Split('.')[2] + ")";
 			cboSia.SelectedIndex = 0;

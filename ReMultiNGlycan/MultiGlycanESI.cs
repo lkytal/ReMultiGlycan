@@ -2619,14 +2619,14 @@ namespace COL.MultiGlycan
 							MatchedGlycanPeak MatchedGlycanP = new MatchedGlycanPeak(argScanNum, argTime, p, ClosedGlycan);
 							MatchedPeaks.Add(MatchedGlycanP);
 							/*ClusteredPeak tmpPeak = new ClusteredPeak(argScanNum);
-                            tmpPeak.EndScan = argScanNum;
-                            tmpPeak.StartTime = argTime;
-                            tmpPeak.EndTime = argTime;
-                            tmpPeak.Charge = ClosedPeak.Charge;
-                            tmpPeak.GlycanComposition = ClosedPeak.GlycanComposition;
-                            tmpPeak.Peaks.Add(p);
-                            tmpPeak.Adduct = ClosedPeak.AdductLabel;
-                            ClsPeaks.Add(tmpPeak);*/
+							tmpPeak.EndScan = argScanNum;
+							tmpPeak.StartTime = argTime;
+							tmpPeak.EndTime = argTime;
+							tmpPeak.Charge = ClosedPeak.Charge;
+							tmpPeak.GlycanComposition = ClosedPeak.GlycanComposition;
+							tmpPeak.Peaks.Add(p);
+							tmpPeak.Adduct = ClosedPeak.AdductLabel;
+							ClsPeaks.Add(tmpPeak);*/
 						}
 					}
 				}

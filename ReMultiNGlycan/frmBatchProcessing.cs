@@ -463,221 +463,221 @@ namespace COL.MultiGlycan
 		}
 
 		/*
-        private void GetBalanceData(List<QuantitationPeak> argQuantPeaks)
-        {
-            QuantitationPeak processingGlycan =null;
-            try
-            {
-                int minScanCount = 0;
-                List<QuantitationPeak> qPeaks =   argQuantPeaks.Where(x => x.ProtonatedPeaks.Count > 0).ToList();
-                if (qPeaks.Count > 0)
-                {
-                    minScanCount = qPeaks.Min(x => x.ProtonatedPeaks.Count);
-                    foreach (QuantitationPeak qPeak in argQuantPeaks)
-                    {
-                        processingGlycan = qPeak;
-                        while (qPeak.ProtonatedPeaks.Count > minScanCount)
-                        {
-                            if (qPeak.ProtonatedPeaks[0].Item2 > qPeak.ProtonatedPeaks[qPeak.ProtonatedPeaks.Count - 1].Item2)
-                            {
-                                qPeak.ProtonatedPeaks.RemoveAt(qPeak.ProtonatedPeaks.Count - 1);
-                            }
-                            else
-                            {
-                                qPeak.ProtonatedPeaks.RemoveAt(0);
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                throw new InvalidDataException("GetBalanceData exception " + processingGlycan.GlycanKey);
-            }
-        }
-        private void ImputationData(Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> argResult)
-        {
-            foreach (string GlycanKey in argResult.Keys)
-            {
-                if (!argResult[GlycanKey].ContainsKey("H"))
-                {
-                    continue;
-                }
-                List<Tuple<float,float>> ProtonatedPeak = argResult[GlycanKey]["H"];
-                List<Tuple<float, float>> AddedPeak = new List<Tuple<float, float>>();
+		private void GetBalanceData(List<QuantitationPeak> argQuantPeaks)
+		{
+			QuantitationPeak processingGlycan =null;
+			try
+			{
+				int minScanCount = 0;
+				List<QuantitationPeak> qPeaks =   argQuantPeaks.Where(x => x.ProtonatedPeaks.Count > 0).ToList();
+				if (qPeaks.Count > 0)
+				{
+					minScanCount = qPeaks.Min(x => x.ProtonatedPeaks.Count);
+					foreach (QuantitationPeak qPeak in argQuantPeaks)
+					{
+						processingGlycan = qPeak;
+						while (qPeak.ProtonatedPeaks.Count > minScanCount)
+						{
+							if (qPeak.ProtonatedPeaks[0].Item2 > qPeak.ProtonatedPeaks[qPeak.ProtonatedPeaks.Count - 1].Item2)
+							{
+								qPeak.ProtonatedPeaks.RemoveAt(qPeak.ProtonatedPeaks.Count - 1);
+							}
+							else
+							{
+								qPeak.ProtonatedPeaks.RemoveAt(0);
+							}
+						}
+					}
+				}
+			}
+			catch
+			{
+				throw new InvalidDataException("GetBalanceData exception " + processingGlycan.GlycanKey);
+			}
+		}
+		private void ImputationData(Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> argResult)
+		{
+			foreach (string GlycanKey in argResult.Keys)
+			{
+				if (!argResult[GlycanKey].ContainsKey("H"))
+				{
+					continue;
+				}
+				List<Tuple<float,float>> ProtonatedPeak = argResult[GlycanKey]["H"];
+				List<Tuple<float, float>> AddedPeak = new List<Tuple<float, float>>();
 
-                for (int i = 0; i < ProtonatedPeak.Count - 1; i++)
-                {
-                    float TimeDifference = Convert.ToSingle(Math.Floor((ProtonatedPeak[i+1].Item1 - ProtonatedPeak[i].Item1) * 100) / 100 );
-                    if (TimeDifference > 0.5 || TimeDifference <= 0.07f)
-                    {
-                        continue;
-                    }
-                    else //Imputation needed
-                    {
-                        int TimeIntervalCount = (int)Math.Ceiling(TimeDifference / 0.07) -1;
-                        float AvgIntensity = (ProtonatedPeak[i].Item2 + ProtonatedPeak[i + 1].Item2 )/ 2;
-                        for (int j = 1; j <= TimeIntervalCount; j++)
-                        {
-                            AddedPeak.Add(new Tuple<float, float>(ProtonatedPeak[i].Item1 + j * 0.07f,AvgIntensity));
-                        }
-                    }
-                }
-                ProtonatedPeak.AddRange(AddedPeak);
-                ProtonatedPeak = ProtonatedPeak.OrderBy(i => i.Item1).ToList();
-            }
-        }
-        private Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> ReadFullResultCSV(string argFile)
-        {
-            StreamReader sr = null;
-            //Time	Scan Num	Abundance	m/z	HexNac-Hex-deHex-NeuAc-NeuGc	Adduct	Composition mono
-            //34.21	3605	53598.02	1093.567	2-8-0-0-0	H * 2; 	2185.118885
+				for (int i = 0; i < ProtonatedPeak.Count - 1; i++)
+				{
+					float TimeDifference = Convert.ToSingle(Math.Floor((ProtonatedPeak[i+1].Item1 - ProtonatedPeak[i].Item1) * 100) / 100 );
+					if (TimeDifference > 0.5 || TimeDifference <= 0.07f)
+					{
+						continue;
+					}
+					else //Imputation needed
+					{
+						int TimeIntervalCount = (int)Math.Ceiling(TimeDifference / 0.07) -1;
+						float AvgIntensity = (ProtonatedPeak[i].Item2 + ProtonatedPeak[i + 1].Item2 )/ 2;
+						for (int j = 1; j <= TimeIntervalCount; j++)
+						{
+							AddedPeak.Add(new Tuple<float, float>(ProtonatedPeak[i].Item1 + j * 0.07f,AvgIntensity));
+						}
+					}
+				}
+				ProtonatedPeak.AddRange(AddedPeak);
+				ProtonatedPeak = ProtonatedPeak.OrderBy(i => i.Item1).ToList();
+			}
+		}
+		private Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> ReadFullResultCSV(string argFile)
+		{
+			StreamReader sr = null;
+			//Time	Scan Num	Abundance	m/z	HexNac-Hex-deHex-NeuAc-NeuGc	Adduct	Composition mono
+			//34.21	3605	53598.02	1093.567	2-8-0-0-0	H * 2; 	2185.118885
 
-            try
-            {
-                Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> Result = new Dictionary<string, Dictionary<string, List<Tuple<float, float>>>>();
-                //Key 1: Glycan, Key 2: Adduct
-                sr = new StreamReader(argFile);
-                sr.ReadLine(); // Title
-                string tmp = "";
-                do
-                {
-                    tmp = sr.ReadLine();
-                    if (tmp == null)
-                    {
-                        break;
-                    }
-                    string[] tmpAry = tmp.Split(',');
-                    string GlycanKey = tmpAry[4];
-                    string[] Adducts = tmpAry[5].Trim().Substring(0, tmpAry[5].Trim().Length - 1).Split(';');
-                    string AdductKey = "";
+			try
+			{
+				Dictionary<string, Dictionary<string, List<Tuple<float, float>>>> Result = new Dictionary<string, Dictionary<string, List<Tuple<float, float>>>>();
+				//Key 1: Glycan, Key 2: Adduct
+				sr = new StreamReader(argFile);
+				sr.ReadLine(); // Title
+				string tmp = "";
+				do
+				{
+					tmp = sr.ReadLine();
+					if (tmp == null)
+					{
+						break;
+					}
+					string[] tmpAry = tmp.Split(',');
+					string GlycanKey = tmpAry[4];
+					string[] Adducts = tmpAry[5].Trim().Substring(0, tmpAry[5].Trim().Length - 1).Split(';');
+					string AdductKey = "";
 
-                    for (int i = 0; i < Adducts.Length; i++)
-                    {
-                        AdductKey = AdductKey + Adducts[i].Trim().Split('*')[0].Trim() + "+";
-                    }
-                    AdductKey = AdductKey.Substring(0, AdductKey.Length - 1);
-                    if (!Result.ContainsKey(GlycanKey))
-                    {
-                        Result.Add(GlycanKey, new Dictionary<string, List<Tuple<float, float>>>());
-                    }
-                    if (!Result[GlycanKey].ContainsKey(AdductKey))
-                    {
-                        Result[GlycanKey].Add(AdductKey, new List<Tuple<float, float>>());
-                    }
+					for (int i = 0; i < Adducts.Length; i++)
+					{
+						AdductKey = AdductKey + Adducts[i].Trim().Split('*')[0].Trim() + "+";
+					}
+					AdductKey = AdductKey.Substring(0, AdductKey.Length - 1);
+					if (!Result.ContainsKey(GlycanKey))
+					{
+						Result.Add(GlycanKey, new Dictionary<string, List<Tuple<float, float>>>());
+					}
+					if (!Result[GlycanKey].ContainsKey(AdductKey))
+					{
+						Result[GlycanKey].Add(AdductKey, new List<Tuple<float, float>>());
+					}
 
-                    List<Tuple<float, float>> sameLCTime = Result[GlycanKey][AdductKey].Where(t => t.Item1 == Convert.ToSingle(tmpAry[0])).ToList();
-                    if (sameLCTime.Count!=0  )
-                    {
-                        float LCTime = sameLCTime[0].Item1;
-                        float NewIntensity = sameLCTime[0].Item2 + Convert.ToSingle(tmpAry[2]);
-                        int RemoveIdx = Result[GlycanKey][AdductKey].IndexOf(sameLCTime[0]);
-                        Result[GlycanKey][AdductKey].RemoveAt(RemoveIdx);
-                        Result[GlycanKey][AdductKey].Insert(RemoveIdx, new Tuple<float, float>(LCTime, NewIntensity));
-                    }
-                    else
-                    {
-                        Result[GlycanKey][AdductKey].Add(new Tuple<float, float>(Convert.ToSingle(tmpAry[0]), Convert.ToSingle(tmpAry[2])));
-                    }
-                } while (!sr.EndOfStream);
-                return Result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (sr != null)
-                {
-                    sr.Close();
-                }
-            }
-        }
+					List<Tuple<float, float>> sameLCTime = Result[GlycanKey][AdductKey].Where(t => t.Item1 == Convert.ToSingle(tmpAry[0])).ToList();
+					if (sameLCTime.Count!=0  )
+					{
+						float LCTime = sameLCTime[0].Item1;
+						float NewIntensity = sameLCTime[0].Item2 + Convert.ToSingle(tmpAry[2]);
+						int RemoveIdx = Result[GlycanKey][AdductKey].IndexOf(sameLCTime[0]);
+						Result[GlycanKey][AdductKey].RemoveAt(RemoveIdx);
+						Result[GlycanKey][AdductKey].Insert(RemoveIdx, new Tuple<float, float>(LCTime, NewIntensity));
+					}
+					else
+					{
+						Result[GlycanKey][AdductKey].Add(new Tuple<float, float>(Convert.ToSingle(tmpAry[0]), Convert.ToSingle(tmpAry[2])));
+					}
+				} while (!sr.EndOfStream);
+				return Result;
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				if (sr != null)
+				{
+					sr.Close();
+				}
+			}
+		}
 
-        private Dictionary<string, Dictionary<string, float>> ReadResultCSV(string argFile)
-        {
-            StreamReader sr = null;
-            //Start Time	End Time	Start Scan Num	End Scan Num	Peak Intensity	LC Peak Area	HexNac-Hex-deHex-NeuAc-NeuGc	Composition mono
-            //25.86727	,30.61827,	1366,	1791,	5807018.941,	59232.05865,	2-7-0-0-0	2011.208589
-            try
-            {
-                string DataSetName = Path.GetFileNameWithoutExtension(argFile);
+		private Dictionary<string, Dictionary<string, float>> ReadResultCSV(string argFile)
+		{
+			StreamReader sr = null;
+			//Start Time	End Time	Start Scan Num	End Scan Num	Peak Intensity	LC Peak Area	HexNac-Hex-deHex-NeuAc-NeuGc	Composition mono
+			//25.86727	,30.61827,	1366,	1791,	5807018.941,	59232.05865,	2-7-0-0-0	2011.208589
+			try
+			{
+				string DataSetName = Path.GetFileNameWithoutExtension(argFile);
 
-                Dictionary<string, Dictionary<string, float>> Result =
-                    new Dictionary<string, Dictionary<string, float>>();
-                //Key1 : Glycan Key, Key2: DataSet Name; Value = Peak Intensity
+				Dictionary<string, Dictionary<string, float>> Result =
+					new Dictionary<string, Dictionary<string, float>>();
+				//Key1 : Glycan Key, Key2: DataSet Name; Value = Peak Intensity
 
-                sr = new StreamReader(argFile);
-                string tmp = "";
-                bool isInSection = false;
-                int GlycanKeyIdx = 0;
-                int PeakIntensityIdx = 0;
-                int LabelIdx = 0;
-                do
-                {
-                    tmp = sr.ReadLine();
-                    if (tmp == null)
-                    {
-                        break;
-                    }
-                    if (tmp.StartsWith("Start Time"))
-                    {
-                        string[] tmpAry = tmp.Split(',');
-                        for (int i = 0; i < tmpAry.Length; i++)
-                        {
-                            if (tmpAry[i] == "HexNac-Hex-deHex-NeuAc-NeuGc")
-                            {
-                                GlycanKeyIdx = i;
-                            }
-                            if (tmpAry[i] == "Peak Intensity")
-                            {
-                                PeakIntensityIdx = i;
-                            }
-                            if (tmpAry[i] == "Label Tag")
-                            {
-                                LabelIdx = i;
-                            }
-                        }
-                        isInSection = true;
-                        continue;
-                    }
-                    if (isInSection)
-                    {
-                        string[] tmpAry = tmp.Split(',');
-                        string GlycanKey = tmpAry[GlycanKeyIdx];
-                        if (LabelIdx != 0)
-                        {
-                            GlycanKey = GlycanKey + "-" + tmpAry[LabelIdx];
-                        }
-                        float PeakValue = Convert.ToSingle(tmpAry[PeakIntensityIdx]);
-                        if (!Result.ContainsKey(GlycanKey))
-                        {
-                            Result.Add(GlycanKey, new Dictionary<string, float>());
-                        }
-                        if (!Result[GlycanKey].ContainsKey(DataSetName))
-                        {
-                            Result[GlycanKey].Add(DataSetName, 0);
-                        }
-                        Result[GlycanKey][DataSetName] = Result[GlycanKey][DataSetName] + PeakValue;
-                    }
-                } while (!sr.EndOfStream);
+				sr = new StreamReader(argFile);
+				string tmp = "";
+				bool isInSection = false;
+				int GlycanKeyIdx = 0;
+				int PeakIntensityIdx = 0;
+				int LabelIdx = 0;
+				do
+				{
+					tmp = sr.ReadLine();
+					if (tmp == null)
+					{
+						break;
+					}
+					if (tmp.StartsWith("Start Time"))
+					{
+						string[] tmpAry = tmp.Split(',');
+						for (int i = 0; i < tmpAry.Length; i++)
+						{
+							if (tmpAry[i] == "HexNac-Hex-deHex-NeuAc-NeuGc")
+							{
+								GlycanKeyIdx = i;
+							}
+							if (tmpAry[i] == "Peak Intensity")
+							{
+								PeakIntensityIdx = i;
+							}
+							if (tmpAry[i] == "Label Tag")
+							{
+								LabelIdx = i;
+							}
+						}
+						isInSection = true;
+						continue;
+					}
+					if (isInSection)
+					{
+						string[] tmpAry = tmp.Split(',');
+						string GlycanKey = tmpAry[GlycanKeyIdx];
+						if (LabelIdx != 0)
+						{
+							GlycanKey = GlycanKey + "-" + tmpAry[LabelIdx];
+						}
+						float PeakValue = Convert.ToSingle(tmpAry[PeakIntensityIdx]);
+						if (!Result.ContainsKey(GlycanKey))
+						{
+							Result.Add(GlycanKey, new Dictionary<string, float>());
+						}
+						if (!Result[GlycanKey].ContainsKey(DataSetName))
+						{
+							Result[GlycanKey].Add(DataSetName, 0);
+						}
+						Result[GlycanKey][DataSetName] = Result[GlycanKey][DataSetName] + PeakValue;
+					}
+				} while (!sr.EndOfStream);
 
-                return Result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (sr != null)
-                {
-                    sr.Close();
-                }
-            }
-        }
-        */
+				return Result;
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				if (sr != null)
+				{
+					sr.Close();
+				}
+			}
+		}
+		*/
 		//private void bgWorker_Process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		//{
 		//    try

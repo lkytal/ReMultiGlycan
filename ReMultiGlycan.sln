@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElutionViewer", "ElutionVie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassLibNative", "MassLibNative\MassLibNative.csproj", "{F8908C89-4077-49C6-B342-E06E1016D40B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{76A7122F-0098-44AF-A9B3-7745F7494979}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,12 +85,18 @@ Global
 		{F8908C89-4077-49C6-B342-E06E1016D40B}.Release|x64.Build.0 = Release|x64
 		{F8908C89-4077-49C6-B342-E06E1016D40B}.Release|x86.ActiveCfg = Release|x86
 		{F8908C89-4077-49C6-B342-E06E1016D40B}.Release|x86.Build.0 = Release|x86
+		{76A7122F-0098-44AF-A9B3-7745F7494979}.Debug|Any CPU.ActiveCfg = Debug
+		{76A7122F-0098-44AF-A9B3-7745F7494979}.Debug|x64.ActiveCfg = Debug
+		{76A7122F-0098-44AF-A9B3-7745F7494979}.Debug|x86.ActiveCfg = Debug
+		{76A7122F-0098-44AF-A9B3-7745F7494979}.Release|Any CPU.ActiveCfg = Release
+		{76A7122F-0098-44AF-A9B3-7745F7494979}.Release|x64.ActiveCfg = Release
+		{76A7122F-0098-44AF-A9B3-7745F7494979}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		BuildVersion_UpdateAssemblyVersion = True
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

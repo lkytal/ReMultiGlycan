@@ -20,6 +20,9 @@ namespace COL.MultiGlycan
 		public frmView()
 		{
 			InitializeComponent();
+
+			this.Font = new System.Drawing.Font("Arial", 9);
+
 			LstColor = new List<Color>();
 			//zgcGlycan.IsEnableHZoom = false;
 			//zgcGlycan.IsEnableVZoom = false;
