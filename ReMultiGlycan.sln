@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElutionViewer", "ElutionVie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassLibNative", "MassLibNative\MassLibNative.csproj", "{F8908C89-4077-49C6-B342-E06E1016D40B}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{76A7122F-0098-44AF-A9B3-7745F7494979}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ReMultiGlycanInstaller", "Setup\Setup.vdproj", "{76A7122F-0098-44AF-A9B3-7745F7494979}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,5 +98,6 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_UpdateAssemblyVersion = True
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {87BF29E1-B740-4A70-8766-071B98D778FB}
 	EndGlobalSection
 EndGlobal
