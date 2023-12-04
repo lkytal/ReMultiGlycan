@@ -69,7 +69,6 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eluctionProfileViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.massCalculatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.batchModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.glycanUnitGUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtGlycanPPM = new System.Windows.Forms.TextBox();
@@ -543,8 +542,7 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.eluctionProfileViewerToolStripMenuItem,
-            this.massCalculatorToolStripMenuItem,
-            this.toolStripMenuItem2});
+            this.massCalculatorToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -562,11 +560,6 @@
             this.massCalculatorToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.massCalculatorToolStripMenuItem.Text = "Mass Calculator";
             this.massCalculatorToolStripMenuItem.Click += new System.EventHandler(this.massCalculatorToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(185, 22);
             // 
             // batchModeToolStripMenuItem
             // 
@@ -1418,7 +1411,6 @@
         private System.Windows.Forms.CheckBox chkPermethylated;
         private System.Windows.Forms.ToolStripMenuItem eluctionProfileViewerToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem batchModeToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.Label label11;
