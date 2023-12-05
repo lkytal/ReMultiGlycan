@@ -93,7 +93,8 @@ namespace COL.MultiGlycan
 					}
 					break;
 				} while (true);
-				do
+
+				while (!sr.EndOfStream)
 				{
 					tmp = sr.ReadLine().Split(',');
 					string Key = tmp[dictTitle[GlycanKeyIdx]]; // hex-hexnac-dehax-sia
@@ -103,7 +104,8 @@ namespace COL.MultiGlycan
 						MergeResult.Add(Key, new List<string>());
 					}
 					MergeResult[Key].Add(Time);
-				} while (!sr.EndOfStream);
+				}
+
 				sr.Close();
 
 				//Read Full File
@@ -116,7 +118,7 @@ namespace COL.MultiGlycan
 					dictTitle.Add(tmp[i], i);
 				}
 
-				do
+				while (!sr.EndOfStream)
 				{
 					tmp = sr.ReadLine().Split(',');
 					int Charge = Convert.ToInt32(Math.Round(Convert.ToSingle(tmp[dictTitle["Composition mono"]]) / Convert.ToSingle(tmp[dictTitle["m/z"]]), 0));
@@ -146,7 +148,8 @@ namespace COL.MultiGlycan
 					{
 						mz2GlycanAdductCharge[mz].Add(Key + " + " + Adduct + " z=" + Charge.ToString()); //Glycan_Adduct_Charge
 					}
-				} while (!sr.EndOfStream);
+				}
+
 				sr.Close();
 				alstGlycans.Sort();
 				cboGlycan.Items.AddRange(alstGlycans.ToArray());

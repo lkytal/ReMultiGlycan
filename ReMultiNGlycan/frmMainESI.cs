@@ -147,6 +147,7 @@ namespace COL.MultiGlycan
 				{
 					ESI = new MultiGlycanESI(txtRawFile.Text, Convert.ToInt32(txtStartScan.Text), Convert.ToInt32(txtEndScan.Text), glycanlist, Convert.ToDouble(txtPPM.Text), Convert.ToDouble(txtGlycanPPM.Text), chkPermethylated.Checked, chkReducedReducingEnd.Checked, cboSia.SelectedIndex, DoLog, rdoPositive.Checked);
 				}
+
 				ESI.LabelingMethod = GlycoLib.enumGlycanLabelingMethod.None;
 				if (rdoDRAG.Checked)
 				{
@@ -175,6 +176,7 @@ namespace COL.MultiGlycan
 				{
 					ESI.MinAbundance = 0;
 				}
+
 				if (chkMinLengthOfLC.Checked)
 				{
 					ESI.MinLengthOfLC = Convert.ToSingle(txtScanCount.Text);
@@ -183,10 +185,12 @@ namespace COL.MultiGlycan
 				{
 					ESI.MinLengthOfLC = 0;
 				}
+
 				if (chkMZMatch.Checked)
 				{
 					ESI.IncludeMZMatch = true;
 				}
+
 				ESI.ForceProtonatedGlycan = chkForceProtonated.Checked;
 				// ESI.AdductMass = AdductMasses;
 				//ESI.AdductMassToLabel = AdductLabel;
