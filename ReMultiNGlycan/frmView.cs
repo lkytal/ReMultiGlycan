@@ -57,104 +57,109 @@ namespace COL.MultiGlycan
 		private void btnLoad_Click(object sender, EventArgs e)
 		{
 			openFileDialog1.Filter = "Result File(_FullList.csv)|*_FullList.csv";
-			if (openFileDialog1.ShowDialog() == DialogResult.OK)
+
+			if (openFileDialog1.ShowDialog() != DialogResult.OK)
 			{
-				if (!File.Exists(openFileDialog1.FileName.Replace("_FullList", "")))
-				{
-					MessageBox.Show("Merge Result File Missing, Please put merge and full reuslt in the same folder");
-					return;
-				}
-				dictValue = new Dictionary<string, Dictionary<float, List<string>>>();
-				mz2GlycanAdductCharge = new Dictionary<float, List<string>>();
-				cboGlycan.Items.Clear();
+				return;
+			}
 
-				ArrayList alstGlycans = new ArrayList();
+			if (!File.Exists(openFileDialog1.FileName.Replace("_FullList", "")))
+			{
+				MessageBox.Show("Merge Result File Missing, Please put merge and full reuslt in the same folder");
+				return;
+			}
+			dictValue = new Dictionary<string, Dictionary<float, List<string>>>();
+			mz2GlycanAdductCharge = new Dictionary<float, List<string>>();
+			cboGlycan.Items.Clear();
 
-				//Read Merge Result
-				MergeResult = new Dictionary<string, List<string>>();
-				StreamReader sr = new StreamReader(openFileDialog1.FileName.Replace("_FullList", ""));
-				string[] tmp = null;
-				string GlycanKeyIdx = "HexNac-Hex-deHex-NeuAc-NeuGc";
-				Dictionary<string, int> dictTitle = new Dictionary<string, int>();
-				do
-				{
-					tmp = sr.ReadLine().Split(',');
-					if (!tmp[0].StartsWith("Start Time"))
-					{
-						continue;
-					}
-					for (int i = 0; i < tmp.Length; i++)
-					{
-						dictTitle.Add(tmp[i], i);
-						if (tmp[i].ToLower().Contains("hexnac-hex-dehex-sia"))
-						{
-							GlycanKeyIdx = "HexNac-Hex-deHex-Sia";
-						}
-					}
-					break;
-				} while (true);
+			ArrayList alstGlycans = new ArrayList();
 
-				while (!sr.EndOfStream)
-				{
-					tmp = sr.ReadLine().Split(',');
-					string Key = tmp[dictTitle[GlycanKeyIdx]]; // hex-hexnac-dehax-sia
-					string Time = tmp[dictTitle["Start Time"]] + ":" + tmp[dictTitle["End Time"]] + ":" + tmp[dictTitle["Peak Intensity"]];
-					if (!MergeResult.ContainsKey(Key))
-					{
-						MergeResult.Add(Key, new List<string>());
-					}
-					MergeResult[Key].Add(Time);
-				}
-
-				sr.Close();
-
-				//Read Full File
-				sr = new StreamReader(openFileDialog1.FileName);
+			//Read Merge Result
+			MergeResult = new Dictionary<string, List<string>>();
+			StreamReader sr = new StreamReader(openFileDialog1.FileName.Replace("_FullList", ""));
+			string[] tmp = null;
+			string GlycanKeyIdx = "HexNac-Hex-deHex-NeuAc-NeuGc";
+			Dictionary<string, int> dictTitle = new Dictionary<string, int>();
+			do
+			{
 				tmp = sr.ReadLine().Split(',');
-				dictTitle = new Dictionary<string, int>();
-				//Get Title mapping
+				if (!tmp[0].StartsWith("Start Time"))
+				{
+					continue;
+				}
 				for (int i = 0; i < tmp.Length; i++)
 				{
 					dictTitle.Add(tmp[i], i);
+					if (tmp[i].ToLower().Contains("hexnac-hex-dehex-sia"))
+					{
+						GlycanKeyIdx = "HexNac-Hex-deHex-Sia";
+					}
 				}
+				break;
+			} while (true);
 
-				while (!sr.EndOfStream)
+			while (!sr.EndOfStream)
+			{
+				tmp = sr.ReadLine().Split(',');
+				string Key = tmp[dictTitle[GlycanKeyIdx]]; // hex-hexnac-dehax-sia
+				string Time = tmp[dictTitle["Start Time"]] + ":" + tmp[dictTitle["End Time"]] + ":" + tmp[dictTitle["Peak Intensity"]];
+				if (!MergeResult.ContainsKey(Key))
 				{
-					tmp = sr.ReadLine().Split(',');
-					int Charge = Convert.ToInt32(Math.Round(Convert.ToSingle(tmp[dictTitle["Composition mono"]]) / Convert.ToSingle(tmp[dictTitle["m/z"]]), 0));
-					string Key = tmp[dictTitle[GlycanKeyIdx]] + "-" + Charge.ToString(); // hex-hexnac-dehax-sia
-					string Adduct = tmp[dictTitle["Adduct"]];
-					if (chkMergeCharge.Checked)
-					{
-						Key = tmp[dictTitle[GlycanKeyIdx]];
-					}
-					if (!dictValue.ContainsKey(Key))
-					{
-						dictValue.Add(Key, new Dictionary<float, List<string>>());
-						alstGlycans.Add(Key);
-					}
-					int mz = (int)Convert.ToSingle(tmp[dictTitle["m/z"]].ToString());
-
-					if (!dictValue[Key].ContainsKey(mz))
-					{
-						dictValue[Key].Add(mz, new List<string>());
-					}
-					dictValue[Key][mz].Add(tmp[dictTitle["Time"]] + "-" + tmp[dictTitle["Abundance"]]); // scan time - abuntance
-					if (!mz2GlycanAdductCharge.ContainsKey(mz))
-					{
-						mz2GlycanAdductCharge.Add(mz, new List<string>());
-					}
-					if (!mz2GlycanAdductCharge[mz].Contains(Key + " + " + Adduct + " z=" + Charge.ToString()))
-					{
-						mz2GlycanAdductCharge[mz].Add(Key + " + " + Adduct + " z=" + Charge.ToString()); //Glycan_Adduct_Charge
-					}
+					MergeResult.Add(Key, new List<string>());
 				}
-
-				sr.Close();
-				alstGlycans.Sort();
-				cboGlycan.Items.AddRange(alstGlycans.ToArray());
-				btnSaveAll.Enabled = true;
+				MergeResult[Key].Add(Time);
 			}
+
+			sr.Close();
+
+			//Read Full File
+			sr = new StreamReader(openFileDialog1.FileName);
+			tmp = sr.ReadLine().Split(',');
+			dictTitle = new Dictionary<string, int>();
+			//Get Title mapping
+			for (int i = 0; i < tmp.Length; i++)
+			{
+				dictTitle.Add(tmp[i], i);
+			}
+
+			while (!sr.EndOfStream)
+			{
+				tmp = sr.ReadLine().Split(',');
+				int Charge = Convert.ToInt32(Math.Round(Convert.ToSingle(tmp[dictTitle["Composition mono"]]) / Convert.ToSingle(tmp[dictTitle["m/z"]]), 0));
+				string Key = tmp[dictTitle[GlycanKeyIdx]] + "-" + Charge.ToString(); // hex-hexnac-dehax-sia
+				string Adduct = tmp[dictTitle["Adduct"]];
+				if (chkMergeCharge.Checked)
+				{
+					Key = tmp[dictTitle[GlycanKeyIdx]];
+				}
+				if (!dictValue.ContainsKey(Key))
+				{
+					dictValue.Add(Key, new Dictionary<float, List<string>>());
+					alstGlycans.Add(Key);
+				}
+				int mz = (int)Convert.ToSingle(tmp[dictTitle["m/z"]].ToString());
+
+				if (!dictValue[Key].ContainsKey(mz))
+				{
+					dictValue[Key].Add(mz, new List<string>());
+				}
+				dictValue[Key][mz].Add(tmp[dictTitle["Time"]] + "-" + tmp[dictTitle["Abundance"]]); // scan time - abuntance
+				if (!mz2GlycanAdductCharge.ContainsKey(mz))
+				{
+					mz2GlycanAdductCharge.Add(mz, new List<string>());
+				}
+				if (!mz2GlycanAdductCharge[mz].Contains(Key + " + " + Adduct + " z=" + Charge.ToString()))
+				{
+					mz2GlycanAdductCharge[mz].Add(Key + " + " + Adduct + " z=" + Charge.ToString()); //Glycan_Adduct_Charge
+				}
+			}
+
+			sr.Close();
+			alstGlycans.Sort();
+			cboGlycan.Items.AddRange(alstGlycans.ToArray());
+			cboGlycan.SelectedIndex = 0;
+
+			btnSaveAll.Enabled = true;
 		}
 
 		private void cboGlycan_SelectedIndexChanged(object sender, EventArgs e)

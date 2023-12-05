@@ -94,6 +94,7 @@
 			// 
 			// splitContainer1
 			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.splitContainer1.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
@@ -115,7 +116,7 @@
 			// 
 			this.splitContainer1.Panel2.AutoScroll = true;
 			this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-			this.splitContainer1.Size = new System.Drawing.Size(2400, 1500);
+			this.splitContainer1.Size = new System.Drawing.Size(2364, 1397);
 			this.splitContainer1.SplitterDistance = 80;
 			this.splitContainer1.SplitterWidth = 10;
 			this.splitContainer1.TabIndex = 1;
@@ -222,7 +223,7 @@
 			// splitContainer3.Panel2
 			// 
 			this.splitContainer3.Panel2.Controls.Add(this.splitContainer4);
-			this.splitContainer3.Size = new System.Drawing.Size(2400, 1410);
+			this.splitContainer3.Size = new System.Drawing.Size(2364, 1307);
 			this.splitContainer3.SplitterDistance = 800;
 			this.splitContainer3.SplitterWidth = 10;
 			this.splitContainer3.TabIndex = 2;
@@ -243,7 +244,7 @@
 			// splitContainer2.Panel2
 			// 
 			this.splitContainer2.Panel2.Controls.Add(this.cht);
-			this.splitContainer2.Size = new System.Drawing.Size(800, 1410);
+			this.splitContainer2.Size = new System.Drawing.Size(800, 1307);
 			this.splitContainer2.SplitterDistance = 400;
 			this.splitContainer2.SplitterWidth = 10;
 			this.splitContainer2.TabIndex = 1;
@@ -272,7 +273,7 @@
 			series1.Legend = "Default";
 			series1.Name = "Series1";
 			this.cht.Series.Add(series1);
-			this.cht.Size = new System.Drawing.Size(800, 1000);
+			this.cht.Size = new System.Drawing.Size(800, 897);
 			this.cht.TabIndex = 0;
 			this.cht.Text = "chart1";
 			title1.Name = "Default";
@@ -293,8 +294,8 @@
 			// splitContainer4.Panel2
 			// 
 			this.splitContainer4.Panel2.Controls.Add(this.splitContainer5);
-			this.splitContainer4.Size = new System.Drawing.Size(1590, 1410);
-			this.splitContainer4.SplitterDistance = 800;
+			this.splitContainer4.Size = new System.Drawing.Size(1554, 1307);
+			this.splitContainer4.SplitterDistance = 741;
 			this.splitContainer4.SplitterWidth = 10;
 			this.splitContainer4.TabIndex = 1;
 			// 
@@ -307,7 +308,7 @@
 			this.dgvPeakList.Margin = new System.Windows.Forms.Padding(0);
 			this.dgvPeakList.Name = "dgvPeakList";
 			this.dgvPeakList.RowHeadersWidth = 123;
-			this.dgvPeakList.Size = new System.Drawing.Size(1590, 800);
+			this.dgvPeakList.Size = new System.Drawing.Size(1554, 741);
 			this.dgvPeakList.TabIndex = 0;
 			// 
 			// ctxMenuStrip
@@ -350,7 +351,7 @@
 			// splitContainer5.Panel2
 			// 
 			this.splitContainer5.Panel2.Controls.Add(this.chkboxlstPeak);
-			this.splitContainer5.Size = new System.Drawing.Size(1590, 600);
+			this.splitContainer5.Size = new System.Drawing.Size(1554, 556);
 			this.splitContainer5.SplitterDistance = 80;
 			this.splitContainer5.SplitterWidth = 10;
 			this.splitContainer5.TabIndex = 1;
@@ -388,7 +389,7 @@
 			this.chkboxlstPeak.Location = new System.Drawing.Point(0, 0);
 			this.chkboxlstPeak.Margin = new System.Windows.Forms.Padding(0);
 			this.chkboxlstPeak.Name = "chkboxlstPeak";
-			this.chkboxlstPeak.Size = new System.Drawing.Size(1590, 510);
+			this.chkboxlstPeak.Size = new System.Drawing.Size(1554, 466);
 			this.chkboxlstPeak.TabIndex = 0;
 			this.chkboxlstPeak.SelectedIndexChanged += new System.EventHandler(this.chkboxlstPeak_SelectedIndexChanged);
 			// 
