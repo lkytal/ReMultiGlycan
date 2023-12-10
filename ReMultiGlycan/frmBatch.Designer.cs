@@ -1306,7 +1306,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmBatch";
-            this.Text = "MultiGlycan-ESI Quantification (Batch mode)";
+            this.Text = "ReMultiGlycan-ESI Quantification (Batch mode)";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox5.ResumeLayout(false);

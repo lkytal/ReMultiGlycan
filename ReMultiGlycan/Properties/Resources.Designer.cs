@@ -69,15 +69,5 @@ namespace COL.ReMultiGlycan.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] RT_MANIFEST {
-            get {
-                object obj = ResourceManager.GetObject("RT_MANIFEST", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

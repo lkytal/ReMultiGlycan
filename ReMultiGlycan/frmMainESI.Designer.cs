@@ -1285,7 +1285,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmMainESI";
-            this.Text = "MultiGlycan-ESI Quantification";
+            this.Text = "ReMultiGlycan-ESI Quantification";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
