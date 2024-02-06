@@ -10,34 +10,34 @@ namespace COL.GlycoLib
 	{
 		public static Image GetAnnotatedImage(string argPeptide, MSScan argScan, List<MSPoint> argPeaks, GlycanStructure argStructure)
 		{
-			float MaxX = argStructure.Root.FetchAllGlycanNode().OrderByDescending(o => o.IDMass).ToList()[0].IDMass;
+			var MaxX = argStructure.Root.FetchAllGlycanNode().OrderByDescending(o => o.IDMass).ToList()[0].IDMass;
 			if (MaxX + 100 > 2000.0)
 			{
 				MaxX = 2000.0f;
 			}
 			else
 			{
-				MaxX = MaxX + 100;
+				MaxX += 100;
 			}
-			ZedGraph.GraphPane Pane = new ZedGraph.GraphPane(new RectangleF(0.0f, 0.0f, 2000.0f, 1500.0f), argScan.ScanNo.ToString(), "Mass", "Intensity");
+			var Pane = new ZedGraph.GraphPane(new RectangleF(0.0f, 0.0f, 2000.0f, 1500.0f), argScan.ScanNo.ToString(), "Mass", "Intensity");
 			//ZedGraph.MasterPane Pane = new ZedGraph.MasterPane(argTitle,new RectangleF(0.0f, 0.0f, 2400.0f, 1800.0f) );
 			Pane.XAxis.MajorTic.IsInside = false;
 			Pane.XAxis.MinorTic.IsInside = false;
 			Pane.Legend.IsVisible = false;
-			ZedGraph.PointPairList Peaks = new ZedGraph.PointPairList();
+			var Peaks = new ZedGraph.PointPairList();
 
-			double MaxIntensity = 0.0;
+			var MaxIntensity = 0.0;
 			/////////////////
 			//Peaks
 			////////////////
-			foreach (MSPoint p in argPeaks)
+			foreach (var p in argPeaks)
 			{
 				if (p.Intensity > MaxIntensity && p.Mass <= MaxX)
 				{
 					MaxIntensity = p.Intensity;
 				}
 			}
-			foreach (MSPoint p in argPeaks)
+			foreach (var p in argPeaks)
 			{
 				if (p.Mass <= MaxX)
 				{
@@ -60,7 +60,7 @@ namespace COL.GlycoLib
 			GlycansDrawer GS;
 			double previousBoundary = 0;
 
-			foreach (GlycanTreeNode t in argStructure.Root.FetchAllGlycanNode().OrderBy(o => o.IDMass).ToList())
+			foreach (var t in argStructure.Root.FetchAllGlycanNode().OrderBy(o => o.IDMass).ToList())
 			{
 				GS = new GlycansDrawer(t.IUPACFromRoot, false);
 				double glycopeptideMZ = t.IDMass;
@@ -75,11 +75,11 @@ namespace COL.GlycoLib
 				//                 FGS.NoOfNeuAc * GlycanMass.GetGlycanAVGMasswithCharge(Glycan.Type.NeuAc, FGS.Charge);
 				//glycopeptideMZ = glycopeptideMZ +
 				//                 FGS.NoOfNeuGc * GlycanMass.GetGlycanAVGMasswithCharge(Glycan.Type.NeuGc, FGS.Charge);
-				Image imgStructure = GlycanImage.RotateImage(GS.GetImage(), 270);
+				var imgStructure = GlycanImage.RotateImage(GS.GetImage(), 270);
 
-				ZedGraph.TextObj txtGlycanMz = new ZedGraph.TextObj(glycopeptideMZ.ToString("0.000"), 100, 131);
+				var txtGlycanMz = new ZedGraph.TextObj(glycopeptideMZ.ToString("0.000"), 100, 131);
 
-				double PositionX = glycopeptideMZ;
+				var PositionX = glycopeptideMZ;
 
 				if (previousBoundary >= PositionX)
 				{
@@ -94,21 +94,21 @@ namespace COL.GlycoLib
 				{
 					previousBoundary = (float)txtGlycanMz.Location.Width + PositionX;
 				}
-				ZedGraph.ImageObj glycan = new ZedGraph.ImageObj(imgStructure, PositionX, 130, imgStructure.Width + 20, imgStructure.Height);
+				var glycan = new ZedGraph.ImageObj(imgStructure, PositionX, 130, imgStructure.Width + 20, imgStructure.Height);
 
 				glycan.IsScaled = false;
 				glycan.Location.AlignV = ZedGraph.AlignV.Bottom;
 
 				txtGlycanMz.Location.X = glycan.Location.X + (float)glycan.Image.Width / 2 - (float)txtGlycanMz.Location.Width / 2;
-				txtGlycanMz.FontSpec.Size = txtGlycanMz.FontSpec.Size * 0.3f;
+				txtGlycanMz.FontSpec.Size *= 0.3f;
 				txtGlycanMz.FontSpec.Border.IsVisible = false;
 
 				Pane.GraphObjList.Add(txtGlycanMz);
 				Pane.GraphObjList.Add(glycan);
 
 				double interval = 100000;
-				int idx = 0;
-				for (int i = 0; i < Peaks.Count; i++)
+				var idx = 0;
+				for (var i = 0; i < Peaks.Count; i++)
 				{
 					if (Math.Abs(Peaks[i].X - glycopeptideMZ) < interval)
 					{
@@ -116,9 +116,9 @@ namespace COL.GlycoLib
 						idx = i;
 					}
 				}
-				string mzLabelwPPM = Peaks[idx].X.ToString("0.000");// + "\n(" + Math.Abs(glycopeptideMZ - (float)Peaks[idx].X).ToString("0") + "da)";
-				ZedGraph.TextObj PeakLabel = new ZedGraph.TextObj(mzLabelwPPM, Peaks[idx].X, Peaks[idx].Y + 3.0);
-				PeakLabel.FontSpec.Size = PeakLabel.FontSpec.Size * 0.3f;
+				var mzLabelwPPM = Peaks[idx].X.ToString("0.000");// + "\n(" + Math.Abs(glycopeptideMZ - (float)Peaks[idx].X).ToString("0") + "da)";
+				var PeakLabel = new ZedGraph.TextObj(mzLabelwPPM, Peaks[idx].X, Peaks[idx].Y + 3.0);
+				PeakLabel.FontSpec.Size *= 0.3f;
 				PeakLabel.FontSpec.Border.IsVisible = false;
 				PeakLabel.FontSpec.Fill.IsVisible = false;
 				Pane.GraphObjList.Add(PeakLabel);
@@ -132,22 +132,22 @@ namespace COL.GlycoLib
 			//Glycan Structure
 			////////////
 			GS = new GlycansDrawer(argStructure.IUPACString, false);
-			Image imgStruc = RotateImage(GS.GetImage(), 180);
-			ZedGraph.ImageObj fullStructure = new ZedGraph.ImageObj(imgStruc, Pane.XAxis.Scale.Min + 20, 140, imgStruc.Width + 20, imgStruc.Height);
+			var imgStruc = RotateImage(GS.GetImage(), 180);
+			var fullStructure = new ZedGraph.ImageObj(imgStruc, Pane.XAxis.Scale.Min + 20, 140, imgStruc.Width + 20, imgStruc.Height);
 			fullStructure.IsScaled = false;
 			Pane.GraphObjList.Add(fullStructure);
 			///////////////
 			//Glycan M/Z
 			//////////////
 			double glycopeptidemz = GlycanMass.GetGlycanMasswithCharge(argStructure.Root.GlycanType, argStructure.Charge) + argStructure.Y1.Mass - GlycanMass.GetGlycanMasswithCharge(Glycan.Type.HexNAc, argStructure.Charge);
-			ZedGraph.TextObj txtGlycanMZ = new ZedGraph.TextObj("\n              Precursor:" + argScan.ParentMZ.ToString("0.000") + "(" + argScan.ParentCharge.ToString() + ")" +
-																												"\nPeptide Sequence:" + argPeptide
+			var txtGlycanMZ = new ZedGraph.TextObj("\n              Precursor:" + argScan.ParentMZ.ToString("0.000") + "(" + argScan.ParentCharge.ToString() + ")" +
+                                                   "\nPeptide Sequence:" + argPeptide
 					, Pane.GraphObjList[Pane.GraphObjList.Count - 1].Location.X2, 140);
-			txtGlycanMZ.FontSpec.Size = txtGlycanMZ.FontSpec.Size * 0.3f;
+			txtGlycanMZ.FontSpec.Size *= 0.3f;
 			txtGlycanMZ.FontSpec.Border.IsVisible = false;
 			txtGlycanMZ.FontSpec.Fill.IsVisible = false;
 			Pane.GraphObjList.Add(txtGlycanMZ);
-			Image tmp = (Image)Pane.GetImage();
+			var tmp = (Image)Pane.GetImage();
 
 			return tmp;
 		}
@@ -165,25 +165,25 @@ namespace COL.GlycoLib
 
 			//Get the new bounds given from the rotation of the corners
 			//(avoid clipping of the image)
-			Rectangle bounds = PointMath.GetBounds(rotationPoints);
+			var bounds = PointMath.GetBounds(rotationPoints);
 
 			//An empy bitmap to draw the rotated image
-			Bitmap rotatedBitmap = new Bitmap(bounds.Width, bounds.Height);
+			var rotatedBitmap = new Bitmap(bounds.Width, bounds.Height);
 
-			using (Graphics g = Graphics.FromImage(rotatedBitmap))
+			using (var g = Graphics.FromImage(rotatedBitmap))
 			{
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
 				//Transformation matrix
-				System.Drawing.Drawing2D.Matrix m = new System.Drawing.Drawing2D.Matrix();
+				var m = new System.Drawing.Drawing2D.Matrix();
 				m.RotateAt((float)degreeAngle, new PointF(inputImg.Width / 2.0f, inputImg.Height / 2.0f));
 				m.Translate(-bounds.Left, -bounds.Top, System.Drawing.Drawing2D.MatrixOrder.Append); //shift to compensate for the rotation
 
 				g.Transform = m;
 				g.DrawImage(inputImg, 0, 0);
 			}
-			return (Image)rotatedBitmap;
+			return rotatedBitmap;
 		}
 	}
 }

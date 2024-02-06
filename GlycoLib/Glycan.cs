@@ -2,63 +2,53 @@
 
 namespace COL.GlycoLib
 {
-	[Serializable]
-	public class Glycan
-	{
-		public enum Type
-		{ HexNAc = 1, Hex, DeHex, NeuAc, NeuGc, Man, Gal }
+    [Serializable]
+    public class Glycan
+    {
+        public enum Type
+        {
+            HexNAc = 1,
+            Hex,
+            DeHex,
+            NeuAc,
+            NeuGc,
+            Man,
+            Gal
+        }
 
-		private Type _type;
-		private int _charge;
+        public Glycan(Type argType, int argCharge)
+        {
+            GlycanType = argType;
+            Charge = argCharge;
+        }
 
-		public Glycan(Type argType, int argCharge)
-		{
-			_type = argType;
-			_charge = argCharge;
-		}
+        public Type GlycanType { get; }
 
-		public Type GlycanType => _type;
+        public int Charge { get; }
 
-		public int Charge => _charge;
+        public float Mz => GlycanMass.GetGlycanMasswithCharge(GlycanType, Charge);
 
-		public float Mz => GlycanMass.GetGlycanMasswithCharge(_type, _charge);
+        public float AVGMz => GlycanMass.GetGlycanAVGMasswithCharge(GlycanType, Charge);
 
-		public float AVGMz => GlycanMass.GetGlycanAVGMasswithCharge(_type, _charge);
+        public float Mass => GlycanMass.GetGlycanMass(GlycanType);
 
-		public float Mass => GlycanMass.GetGlycanMass(_type);
+        public float AVGMass => GlycanMass.GetGlycanAVGMass(GlycanType);
 
-		public float AVGMass => GlycanMass.GetGlycanAVGMass(_type);
-
-		public static Glycan.Type String2GlycanType(string argType)
-		{
-			if (argType.ToLower().Contains("glcnac") || argType.ToLower().Contains("hexnac"))
-			{
-				return Glycan.Type.HexNAc;
-			}
-			else if (argType.ToLower().Contains("fuc") || argType.ToLower().Contains("dehex"))
-			{
-				return Glycan.Type.DeHex;
-			}
-			else if (argType.ToLower().Contains("gal"))
-			{
-				return Glycan.Type.Hex;
-			}
-			else if (argType.ToLower().Contains("neuac"))
-			{
-				return Glycan.Type.NeuAc;
-			}
-			else if (argType.ToLower().Contains("neugc"))
-			{
-				return Glycan.Type.NeuGc;
-			}
-			else if (argType.ToLower().Contains("man") || argType.ToLower().Contains("hex"))
-			{
-				return Glycan.Type.Hex;
-			}
-			else
-			{
-				throw new Exception("IUPAC contain unrecognized glycan or string");
-			}
-		}
-	}
+        public static Type String2GlycanType(string argType)
+        {
+            if (argType.ToLower().Contains("glcnac") || argType.ToLower().Contains("hexnac"))
+                return Type.HexNAc;
+            if (argType.ToLower().Contains("fuc") || argType.ToLower().Contains("dehex"))
+                return Type.DeHex;
+            if (argType.ToLower().Contains("gal"))
+                return Type.Hex;
+            if (argType.ToLower().Contains("neuac"))
+                return Type.NeuAc;
+            if (argType.ToLower().Contains("neugc"))
+                return Type.NeuGc;
+            if (argType.ToLower().Contains("man") || argType.ToLower().Contains("hex"))
+                return Type.Hex;
+            throw new Exception("IUPAC contain unrecognized glycan or string");
+        }
+    }
 }

@@ -22,53 +22,49 @@
 		public static float GetGlycanMass(Glycan.Type argType)
 		{
 			float Mass = 0.0f;
-			if (argType == Glycan.Type.HexNAc)
-			{
-				Mass = _HexNAc;
-			}
-			else if (argType == Glycan.Type.Hex)
-			{
-				Mass = _Hex;
-			}
-			else if (argType == Glycan.Type.DeHex)
-			{
-				Mass = _DeHex;
-			}
-			else if (argType == Glycan.Type.NeuAc)
-			{
-				Mass = _NeuAc;
-			}
-			else
-			{
-				Mass = _NeuGc;
-			}
-			return Mass;
+            switch (argType)
+            {
+                case Glycan.Type.HexNAc:
+                    Mass = _HexNAc;
+                    break;
+                case Glycan.Type.Hex:
+                    Mass = _Hex;
+                    break;
+                case Glycan.Type.DeHex:
+                    Mass = _DeHex;
+                    break;
+                case Glycan.Type.NeuAc:
+                    Mass = _NeuAc;
+                    break;
+                default:
+                    Mass = _NeuGc;
+                    break;
+            }
+            return Mass;
 		}
 
 		public static float GetGlycanAVGMass(Glycan.Type argType)
 		{
 			float Mass = 0.0f;
-			if (argType == Glycan.Type.HexNAc)
-			{
-				Mass = _HexNAcAVG;
-			}
-			else if (argType == Glycan.Type.Hex)
-			{
-				Mass = _HexAVG;
-			}
-			else if (argType == Glycan.Type.DeHex)
-			{
-				Mass = _DeHexAVG;
-			}
-			else if (argType == Glycan.Type.NeuAc)
-			{
-				Mass = _NeuAcAVG;
-			}
-			else
-			{
-				Mass = _NeuGcAVG;
-			}
-			return Mass;
+            switch (argType)
+            {
+                case Glycan.Type.HexNAc:
+                    Mass = _HexNAcAVG;
+                    break;
+                case Glycan.Type.Hex:
+                    Mass = _HexAVG;
+                    break;
+                case Glycan.Type.DeHex:
+                    Mass = _DeHexAVG;
+                    break;
+                case Glycan.Type.NeuAc:
+                    Mass = _NeuAcAVG;
+                    break;
+                default:
+                    Mass = _NeuGcAVG;
+                    break;
+            }
+            return Mass;
 		}
 
 		public static float GetGlycanMasswithCharge(Glycan.Type argType, int argCharge)
@@ -77,7 +73,7 @@
 			// m/z = (mass  + Proton * charge) / charge
 			//     => mass/charge + Proton
 			//
-			return (float)((GetGlycanMass(argType) + MassLib.Atoms.ProtonMass * argCharge) / argCharge);
+			return (GetGlycanMass(argType) + MassLib.Atoms.ProtonMass * argCharge) / argCharge;
 		}
 
 		public static float GetGlycanAVGMasswithCharge(Glycan.Type argType, int argCharge)
@@ -87,7 +83,7 @@
 			//     => mass/charge + Proton
 			//
 
-			return (float)((GetGlycanAVGMass(argType) + MassLib.Atoms.ProtonMass * argCharge) / argCharge);
+			return (GetGlycanAVGMass(argType) + MassLib.Atoms.ProtonMass * argCharge) / argCharge;
 		}
 
 		public static float GetGlycanMass(GlycanCompound argGlycanComp)
@@ -98,11 +94,11 @@
 						  argGlycanComp.NoOfDeHex * _DeHex;
 			if (argGlycanComp.isHuman)
 			{
-				Mass = Mass + argGlycanComp.NoOfSia * _NeuAc;
+				Mass += argGlycanComp.NoOfSia * _NeuAc;
 			}
 			else
 			{
-				Mass = Mass + argGlycanComp.NoOfSia * _NeuGc;
+				Mass += argGlycanComp.NoOfSia * _NeuGc;
 			}
 			return Mass;
 		}
@@ -115,23 +111,23 @@
 						  argGlycanComp.NoOfDeHex * _DeHexAVG;
 			if (argGlycanComp.isHuman)
 			{
-				Mass = Mass + argGlycanComp.NoOfSia * _NeuAcAVG;
+				Mass += argGlycanComp.NoOfSia * _NeuAcAVG;
 			}
 			else
 			{
-				Mass = Mass + argGlycanComp.NoOfSia * _NeuGcAVG;
+				Mass += argGlycanComp.NoOfSia * _NeuGcAVG;
 			}
 			return Mass;
 		}
 
 		public static float GetGlycanMasswithCharge(GlycanCompound argGlycanComp, int argCharge)
 		{
-			return (float)((GetGlycanMass(argGlycanComp) + MassLib.Atoms.ProtonMass * argCharge) / argCharge);
+			return (GetGlycanMass(argGlycanComp) + MassLib.Atoms.ProtonMass * argCharge) / argCharge;
 		}
 
 		public static float GetGlycanAVGMasswithCharge(GlycanCompound argGlycanComp, int argCharge)
 		{
-			return (float)((GetGlycanAVGMass(argGlycanComp) + MassLib.Atoms.ProtonMass * argCharge) / argCharge);
+			return (GetGlycanAVGMass(argGlycanComp) + MassLib.Atoms.ProtonMass * argCharge) / argCharge;
 		}
 	}
 }

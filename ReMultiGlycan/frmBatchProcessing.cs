@@ -182,7 +182,7 @@ namespace COL.ReMultiGlycan
 				}
 
 				bgWorker_Process.ReportProgress(0);
-				SucceedFileCount = SucceedFileCount + 1;
+				SucceedFileCount += 1;
 				//debugWriter.WriteLine("Finish");
 				//debugWriter.Flush();
 			}
@@ -194,7 +194,7 @@ namespace COL.ReMultiGlycan
 			{
 				ProcessingStatus[runningSlot] = "Status:  Ready";
 				ProcessingFile[runningSlot] = "0";
-				ProcessedFileCount = ProcessedFileCount + 1;
+				ProcessedFileCount += 1;
 			}
 		}
 

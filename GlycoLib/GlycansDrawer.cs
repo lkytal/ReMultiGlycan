@@ -51,18 +51,18 @@ namespace COL.GlycoLib
 
 		public Image GetImage()
 		{
-			int SizeX = MaxXAxis + 15;
-			int SizeY = MaxYAxis + 15;
-			Bitmap bmp = new Bitmap(SizeX, SizeY);
-			Graphics g = Graphics.FromImage(bmp);
+			var SizeX = MaxXAxis + 15;
+			var SizeY = MaxYAxis + 15;
+			var bmp = new Bitmap(SizeX, SizeY);
+			var g = Graphics.FromImage(bmp);
 			g.FillRectangle(new SolidBrush(Color.FromArgb(255, 255, 255)), 0, 0, SizeX, SizeY); //white background
-			Pen Line = new Pen(Color.Black, 1.0f * _ScaleFactor); //Branch line
+			var Line = new Pen(Color.Black, 1.0f * _ScaleFactor); //Branch line
 			AssignColor();
-			foreach (GlycanTreeForDrawer T in GTree.TravelGlycanTreeBFS())
+			foreach (var T in GTree.TravelGlycanTreeBFS())
 			{
 				if (T.GetChild.Count != 0)
 				{
-					foreach (GlycanTreeForDrawer GChild in T.GetChild) //Draw Line
+					foreach (var GChild in T.GetChild) //Draw Line
 					{
 						g.DrawLine(Line, T.PosX + 5 * _ScaleFactor, T.PosY + 5 * _ScaleFactor, GChild.PosX + 5 * _ScaleFactor, GChild.PosY + 5 * _ScaleFactor);
 					}
@@ -86,7 +86,7 @@ namespace COL.GlycoLib
 			newHeight = (int)(image.Height * argPercentage);
 
 			Image newImage = new Bitmap(newWidth, newHeight);
-			using (Graphics graphicsHandle = Graphics.FromImage(newImage))
+			using (var graphicsHandle = Graphics.FromImage(newImage))
 			{
 				graphicsHandle.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 				graphicsHandle.DrawImage(image, 0, 0, newWidth, newHeight);
@@ -96,7 +96,7 @@ namespace COL.GlycoLib
 
 		private void AssignColor()
 		{
-			foreach (GlycanTreeForDrawer T in GTree.TravelGlycanTreeBFS())
+			foreach (var T in GTree.TravelGlycanTreeBFS())
 			{
 				if (T.DistanceToRoot <= 3 && T.Root == Glycan.Type.Hex)
 				{
@@ -105,9 +105,9 @@ namespace COL.GlycoLib
 				if (T.DistanceToRoot > 3 && T.Root == Glycan.Type.Hex)
 				{
 					T.Root = Glycan.Type.Man;
-					GlycanTreeForDrawer Parent = T.Parent;
-					bool _HexNacFound = false;
-					for (int i = T.DistanceToRoot - 1; i >= 3; i--)
+					var Parent = T.Parent;
+					var _HexNacFound = false;
+					for (var i = T.DistanceToRoot - 1; i >= 3; i--)
 					{
 						if (Parent.Root == Glycan.Type.HexNAc)
 						{
@@ -125,11 +125,11 @@ namespace COL.GlycoLib
 
 		public Image GlycanCartoon(Glycan.Type argType)
 		{
-			Bitmap glycan = new Bitmap(11, 11);
-			Graphics g = Graphics.FromImage(glycan);
+			var glycan = new Bitmap(11, 11);
+			var g = Graphics.FromImage(glycan);
 
 			Brush SolidBrush;
-			Pen Linear = new Pen(Color.Black, 1.0f * _ScaleFactor);
+			var Linear = new Pen(Color.Black, 1.0f * _ScaleFactor);
 			Point[] loc;
 			switch (argType)
 			{
@@ -201,9 +201,9 @@ namespace COL.GlycoLib
 
 		private void ConstructTree()
 		{
-			string[] glycans = _iupac.Replace(" ", "").Replace("??", "-").Split('-');
-			Stack TreeStake = new Stack();
-			for (int i = 0; i < glycans.Length; i++)
+			var glycans = _iupac.Replace(" ", "").Replace("??", "-").Split('-');
+			var TreeStake = new Stack();
+			for (var i = 0; i < glycans.Length; i++)
 			{
 				if (glycans[i].Contains(")("))
 				{
@@ -213,7 +213,7 @@ namespace COL.GlycoLib
 				}
 				else if (glycans[i].Contains("("))
 				{
-					List<GlycanTreeForDrawer> GI = new List<GlycanTreeForDrawer>();
+					var GI = new List<GlycanTreeForDrawer>();
 					while (TreeStake.Count != 0 && TreeStake.Peek().ToString() != ")" && TreeStake.Peek().ToString() != "(")
 					{
 						GI.Add((GlycanTreeForDrawer)TreeStake.Pop());
@@ -225,7 +225,7 @@ namespace COL.GlycoLib
 				}
 				else if (glycans[i].Contains(")"))
 				{
-					List<GlycanTreeForDrawer> GILst = new List<GlycanTreeForDrawer>();
+					var GILst = new List<GlycanTreeForDrawer>();
 					while (TreeStake.Count != 0 && TreeStake.Peek().ToString() != ")" && TreeStake.Peek().ToString() != "(")
 					{
 						GILst.Add((GlycanTreeForDrawer)TreeStake.Pop());
@@ -233,8 +233,8 @@ namespace COL.GlycoLib
 					TreeStake.Push(ConnectTree(GILst));
 
 					TreeStake.Push(new GlycanTreeForDrawer(String2GlycanType(glycans[i])));
-					GlycanTreeForDrawer GI = (GlycanTreeForDrawer)TreeStake.Pop();
-					GlycanTreeForDrawer child = (GlycanTreeForDrawer)TreeStake.Pop();
+					var GI = (GlycanTreeForDrawer)TreeStake.Pop();
+					var child = (GlycanTreeForDrawer)TreeStake.Pop();
 					child.Parent = GI;
 					GI.AddChild(child);
 					TreeStake.Pop(); //(
@@ -269,8 +269,8 @@ namespace COL.GlycoLib
 				{
 					if (TreeStake.Count != 0 && TreeStake.Peek().ToString() != ")" && TreeStake.Peek().ToString() != "(")
 					{
-						GlycanTreeForDrawer GI = new GlycanTreeForDrawer(String2GlycanType(glycans[i]));
-						GlycanTreeForDrawer child = (GlycanTreeForDrawer)TreeStake.Pop();
+						var GI = new GlycanTreeForDrawer(String2GlycanType(glycans[i]));
+						var child = (GlycanTreeForDrawer)TreeStake.Pop();
 						child.Parent = GI;
 						GI.AddChild(child);
 						TreeStake.Push(GI);
@@ -296,17 +296,17 @@ namespace COL.GlycoLib
 		private void Placement(GlycanTreeForDrawer argTree)
 		{
 			//PostOrderTravel
-			List<GlycanTreeForDrawer> DFSOrder = new List<GlycanTreeForDrawer>();
+			var DFSOrder = new List<GlycanTreeForDrawer>();
 
-			foreach (GlycanTreeForDrawer t in argTree.TravelGlycanTreeDFS())
+			foreach (var t in argTree.TravelGlycanTreeDFS())
 			{
 				DFSOrder.Add(t);
 			}
 
 			//Assign X Level
-			for (int i = 0; i < DFSOrder.Count; i++)
+			for (var i = 0; i < DFSOrder.Count; i++)
 			{
-				GlycanTreeForDrawer t = DFSOrder[i];
+				var t = DFSOrder[i];
 				if (t.Root == Glycan.Type.DeHex)
 				{
 					t.PosX = t.DistanceToRoot - 1;
@@ -318,9 +318,9 @@ namespace COL.GlycoLib
 			}
 
 			//Assign Y Level
-			for (int i = 0; i < DFSOrder.Count; i++)
+			for (var i = 0; i < DFSOrder.Count; i++)
 			{
-				GlycanTreeForDrawer t = DFSOrder[i];
+				var t = DFSOrder[i];
 
 				if (i == 0) //leaf
 				{
@@ -369,9 +369,9 @@ namespace COL.GlycoLib
 					}
 					else if (t.GetChild.Count == 3)
 					{
-						List<GlycanTreeForDrawer> Fuc = new List<GlycanTreeForDrawer>();
-						List<GlycanTreeForDrawer> NonFuc = new List<GlycanTreeForDrawer>();
-						foreach (GlycanTreeForDrawer Gt in t.GetChild)
+						var Fuc = new List<GlycanTreeForDrawer>();
+						var NonFuc = new List<GlycanTreeForDrawer>();
+						foreach (var Gt in t.GetChild)
 						{
 							if (Gt.Root == Glycan.Type.DeHex)
 							{
@@ -382,8 +382,8 @@ namespace COL.GlycoLib
 								NonFuc.Add(Gt);
 							}
 						}
-						List<float> matrix = new List<float>();
-						foreach (GlycanTreeForDrawer Ct in NonFuc)
+						var matrix = new List<float>();
+						foreach (var Ct in NonFuc)
 						{
 							matrix.Add(Ct.PosY);
 						}
@@ -406,7 +406,7 @@ namespace COL.GlycoLib
 						}
 						else
 						{
-							foreach (GlycanTreeForDrawer Ct in Fuc)
+							foreach (var Ct in Fuc)
 							{
 								matrix.Add(Ct.PosY);
 							}
@@ -422,7 +422,7 @@ namespace COL.GlycoLib
 					{
 						if (t.NumberOfFucChild == 0)
 						{
-							List<float> matrix = new List<float>();
+							var matrix = new List<float>();
 							matrix.Add(t.GetChild[0].PosY);
 							matrix.Add(t.GetChild[1].PosY);
 							matrix.Add(t.GetChild[2].PosY);
@@ -432,9 +432,9 @@ namespace COL.GlycoLib
 						}
 						else
 						{
-							List<GlycanTreeForDrawer> Fuc = new List<GlycanTreeForDrawer>();
-							List<GlycanTreeForDrawer> NonFuc = new List<GlycanTreeForDrawer>();
-							foreach (GlycanTreeForDrawer Gt in t.GetChild)
+							var Fuc = new List<GlycanTreeForDrawer>();
+							var NonFuc = new List<GlycanTreeForDrawer>();
+							foreach (var Gt in t.GetChild)
 							{
 								if (Gt.Root == Glycan.Type.DeHex)
 								{
@@ -445,8 +445,8 @@ namespace COL.GlycoLib
 									NonFuc.Add(Gt);
 								}
 							}
-							List<float> matrix = new List<float>();
-							foreach (GlycanTreeForDrawer Ct in NonFuc)
+							var matrix = new List<float>();
+							foreach (var Ct in NonFuc)
 							{
 								matrix.Add(Ct.PosY);
 							}
@@ -468,11 +468,11 @@ namespace COL.GlycoLib
 								Fuc[0].PosY = t.PosY + 0.5f;
 								Fuc[1].PosY = t.PosY - 0.5f;
 								Fuc[2].PosY = t.PosY + 0.5f;
-								Fuc[2].PosX = Fuc[2].PosX + 0.5f;
+								Fuc[2].PosX += 0.5f;
 							}
 							else if (Fuc.Count == 4)
 							{
-								foreach (GlycanTreeForDrawer Ct in Fuc)
+								foreach (var Ct in Fuc)
 								{
 									matrix.Add(Ct.PosY);
 								}
@@ -481,7 +481,7 @@ namespace COL.GlycoLib
 								Fuc[0].PosY = t.PosY + 0.5f;
 								Fuc[1].PosY = t.PosY - 0.5f;
 								Fuc[2].PosY = t.PosY + 0.5f;
-								Fuc[2].PosX = Fuc[2].PosX + 0.5f;
+								Fuc[2].PosX += 0.5f;
 								Fuc[3].PosY = t.PosY - 0.5f;
 								Fuc[3].PosX = Fuc[2].PosX - 0.5f;
 							}
@@ -492,9 +492,9 @@ namespace COL.GlycoLib
 
 			//Convert Level to Real Position
 
-			for (int i = 0; i < DFSOrder.Count; i++)
+			for (var i = 0; i < DFSOrder.Count; i++)
 			{
-				GlycanTreeForDrawer t = DFSOrder[i];
+				var t = DFSOrder[i];
 				t.PosX = t.PosX * Interval_X + 2.0f;
 				t.PosY = t.PosY * Interval_Y + 2.0f;
 
@@ -511,14 +511,14 @@ namespace COL.GlycoLib
 
 		private GlycanTreeForDrawer ConnectTree(List<GlycanTreeForDrawer> argList)
 		{
-			GlycanTreeForDrawer Tree = argList[0];
+			var Tree = argList[0];
 			if (argList.Count == 1)
 			{
 				return argList[0];
 			}
 			else
 			{
-				for (int i = 1; i < argList.Count; i++)
+				for (var i = 1; i < argList.Count; i++)
 				{
 					if (Tree.GetChild.Count == 0)
 					{
@@ -526,7 +526,7 @@ namespace COL.GlycoLib
 					}
 					else
 					{
-						GlycanTreeForDrawer GI = Tree.GetChild[0];
+						var GI = Tree.GetChild[0];
 						while (GI.GetChild.Count != 0)
 						{
 							GI = GI.GetChild[0];
@@ -576,8 +576,8 @@ namespace COL.GlycoLib
 
 		private void AsignPosY2Nodes(GlycanTreeForDrawer GT)
 		{
-			GlycanTreeForDrawer childT1 = GT.GetChild[0];
-			GlycanTreeForDrawer childT2 = GT.GetChild[1];
+			var childT1 = GT.GetChild[0];
+			var childT2 = GT.GetChild[1];
 			if (GT.GetChild.Count == 3)
 			{
 				if (GT.GetChild[0].Root == Glycan.Type.DeHex)
@@ -597,8 +597,8 @@ namespace COL.GlycoLib
 				}
 			}
 
-			int GradChildT1 = childT1.GetChild.Count - childT1.NumberOfFucChild;
-			int GradChildT2 = childT2.GetChild.Count - childT2.NumberOfFucChild;
+			var GradChildT1 = childT1.GetChild.Count - childT1.NumberOfFucChild;
+			var GradChildT2 = childT2.GetChild.Count - childT2.NumberOfFucChild;
 
 			childT1.PosX = GT.PosX - Interval_X;
 			childT2.PosX = GT.PosX - Interval_X;
@@ -711,9 +711,9 @@ namespace COL.GlycoLib
 
 		private void AsignPosY3Nodes(GlycanTreeForDrawer GT)
 		{
-			GlycanTreeForDrawer childT1 = GT.GetChild[0];
-			GlycanTreeForDrawer childT2 = GT.GetChild[1];
-			GlycanTreeForDrawer childT3 = GT.GetChild[2];
+			var childT1 = GT.GetChild[0];
+			var childT2 = GT.GetChild[1];
+			var childT3 = GT.GetChild[2];
 			if (GT.GetChild.Count == 4)
 			{
 				if (GT.GetChild[0].Root == Glycan.Type.DeHex)
@@ -742,9 +742,9 @@ namespace COL.GlycoLib
 				}
 			}
 
-			int GradChildT1 = childT1.GetChild.Count - childT1.NumberOfFucChild;
-			int GradChildT2 = childT2.GetChild.Count - childT2.NumberOfFucChild;
-			int GradChildT3 = childT3.GetChild.Count - childT3.NumberOfFucChild;
+			var GradChildT1 = childT1.GetChild.Count - childT1.NumberOfFucChild;
+			var GradChildT2 = childT2.GetChild.Count - childT2.NumberOfFucChild;
+			var GradChildT3 = childT3.GetChild.Count - childT3.NumberOfFucChild;
 			childT1.PosX = GT.PosX - Interval_X;
 			childT2.PosX = GT.PosX - Interval_X;
 			childT3.PosX = GT.PosX - Interval_X;

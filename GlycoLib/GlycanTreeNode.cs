@@ -86,7 +86,7 @@ namespace COL.GlycoLib
 				{
 					_missedpeak = 0;
 				}
-				int tmpCount = _missedpeak;
+				var tmpCount = _missedpeak;
 				if (this.SubTree1 != null)
 				{
 					tmpCount += this.SubTree1.MissedPeak;
@@ -109,24 +109,24 @@ namespace COL.GlycoLib
 
 		public IEnumerable TravelGlycanTreeBFS()
 		{
-			Queue GlycanQue = new Queue();
-			List<GlycanTreeNode> glycanOrder = new List<GlycanTreeNode>();
+			var GlycanQue = new Queue();
+			var glycanOrder = new List<GlycanTreeNode>();
 			glycanOrder.Add(this);
 
 			if (GetChildren() != null && GetChildren().Count != 0)
 			{
-				foreach (GlycanTreeNode g in GetChildren())
+				foreach (var g in GetChildren())
 				{
 					GlycanQue.Enqueue(g);
 				}
 			}
 			while (GlycanQue.Count > 0)
 			{
-				GlycanTreeNode g = (GlycanTreeNode)GlycanQue.Dequeue();
+				var g = (GlycanTreeNode)GlycanQue.Dequeue();
 				glycanOrder.Add(g);
 				if (g.GetChildren() != null)
 				{
-					foreach (GlycanTreeNode k in g.GetChildren())
+					foreach (var k in g.GetChildren())
 					{
 						GlycanQue.Enqueue(k);
 					}
@@ -134,7 +134,7 @@ namespace COL.GlycoLib
 			}
 			GlycanQue.Clear();
 			GlycanQue = null;
-			foreach (GlycanTreeNode g in glycanOrder)
+			foreach (var g in glycanOrder)
 			{
 				yield return g;
 			}
@@ -142,12 +142,12 @@ namespace COL.GlycoLib
 
 		public IEnumerable TravelGlycanTreeDFS()
 		{
-			Stack GlycanStk = new Stack();
-			List<GlycanTreeNode> glycanOrder = new List<GlycanTreeNode>();
+			var GlycanStk = new Stack();
+			var glycanOrder = new List<GlycanTreeNode>();
 			GlycanStk.Push(this);
 			while (GlycanStk.Count != 0)
 			{
-				GlycanTreeNode g = (GlycanTreeNode)GlycanStk.Peek();
+				var g = (GlycanTreeNode)GlycanStk.Peek();
 				if ((g.GetChildren() != null && g.GetChildren().Count == 0) ||
 					g.GetChildren() == null)
 				{
@@ -155,8 +155,8 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int NoneTravedChild = 0;
-					foreach (GlycanTreeNode k in g.GetChildren())
+					var NoneTravedChild = 0;
+					foreach (var k in g.GetChildren())
 					{
 						if (!glycanOrder.Contains(k))
 						{
@@ -171,7 +171,7 @@ namespace COL.GlycoLib
 				}
 			}
 
-			foreach (GlycanTreeNode g in glycanOrder)
+			foreach (var g in glycanOrder)
 			{
 				yield return g;
 			}
@@ -212,7 +212,7 @@ namespace COL.GlycoLib
 			{
 				return false;
 			}
-			GlycanTreeNode GT = obj as GlycanTreeNode;
+			var GT = obj as GlycanTreeNode;
 			if ((System.Object)GT == null)
 			{
 				return false;
@@ -243,11 +243,11 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int Level = 1;
-					GlycanTreeNode Par = this.Parent;
+					var Level = 1;
+					var Par = this.Parent;
 					while (Par.Parent != null)
 					{
-						Level = Level + 1;
+						Level += 1;
 						Par = Par.Parent;
 					}
 					return Level;
@@ -257,11 +257,11 @@ namespace COL.GlycoLib
 
 		public object Clone()
 		{
-			MemoryStream ms = new MemoryStream();
-			BinaryFormatter bf = new BinaryFormatter();
+			var ms = new MemoryStream();
+			var bf = new BinaryFormatter();
 			bf.Serialize(ms, this);
 			ms.Position = 0;
-			object obj = bf.Deserialize(ms);
+			var obj = bf.Deserialize(ms);
 			ms.Close();
 			return obj;
 		}
@@ -287,8 +287,8 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int Count = 0;
-					foreach (GlycanTreeNode T in _subTrees)
+					var Count = 0;
+					foreach (var T in _subTrees)
 					{
 						if (T.GlycanType == Glycan.Type.HexNAc)
 						{
@@ -312,8 +312,8 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int Count = 0;
-					foreach (GlycanTreeNode T in _subTrees)
+					var Count = 0;
+					foreach (var T in _subTrees)
 					{
 						if (T.GlycanType == Glycan.Type.Hex)
 						{
@@ -337,8 +337,8 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int Count = 0;
-					foreach (GlycanTreeNode T in _subTrees)
+					var Count = 0;
+					foreach (var T in _subTrees)
 					{
 						if (T.GlycanType == Glycan.Type.DeHex)
 						{
@@ -362,8 +362,8 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int Count = 0;
-					foreach (GlycanTreeNode T in _subTrees)
+					var Count = 0;
+					foreach (var T in _subTrees)
 					{
 						if (T.GlycanType == Glycan.Type.NeuAc)
 						{
@@ -387,8 +387,8 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					int Count = 0;
-					foreach (GlycanTreeNode T in _subTrees)
+					var Count = 0;
+					foreach (var T in _subTrees)
 					{
 						if (T.GlycanType == Glycan.Type.NeuGc)
 						{
@@ -402,8 +402,8 @@ namespace COL.GlycoLib
 
 		public bool HasHexNAcAncestorOtherThanCore()
 		{
-			bool _foundHexNAc = false;
-			GlycanTreeNode Parent = this.Parent;
+			var _foundHexNAc = false;
+			var Parent = this.Parent;
 			while (Parent.DistanceRoot >= 2)
 			{
 				if (Parent.GlycanType == Glycan.Type.HexNAc)
@@ -433,7 +433,7 @@ namespace COL.GlycoLib
 		{
 			get
 			{
-				float score = _IDIntensity;
+				var score = _IDIntensity;
 				if (this.SubTree1 != null)
 				{
 					score += this.SubTree1.Score;
@@ -456,12 +456,12 @@ namespace COL.GlycoLib
 
 		private int GetNoOfGlycan(Glycan.Type argGlycanType)
 		{
-			int count = 0;
+			var count = 0;
 			foreach (GlycanTreeNode t in TravelGlycanTreeBFS())
 			{
 				if (t.GlycanType == argGlycanType)
 				{
-					count = count + 1;
+					count += 1;
 				}
 			}
 			return count;
@@ -510,12 +510,12 @@ namespace COL.GlycoLib
 
 		public List<string> GetSequencingMapList()
 		{
-			List<string> List = new List<string>();
+			var List = new List<string>();
 			foreach (GlycanTreeNode GT in this.TravelGlycanTreeBFS())
 			{
 				if (GT.GetChildren() != null)
 				{
-					foreach (GlycanTreeNode subGT in GT.GetChildren())
+					foreach (var subGT in GT.GetChildren())
 					{
 						List.Add(GT.IDMass.ToString() + "-" + subGT.Node.ToString() + "-" + subGT.IDMass);
 					}
@@ -586,7 +586,7 @@ namespace COL.GlycoLib
 			//    }
 			//    _subTrees = SortedSubTree;
 			//}
-			foreach (GlycanTreeNode GT in this.FetchAllGlycanNode())
+			foreach (var GT in this.FetchAllGlycanNode())
 			{
 				if (GT.GetChildren() != null && GT.GetChildren().Count > 1)
 				{
@@ -596,11 +596,11 @@ namespace COL.GlycoLib
 					});
 				}
 			}
-			for (int i = _subTrees.Count - 2; i >= 0; i--)//Move Fucose to the end of subtree list
+			for (var i = _subTrees.Count - 2; i >= 0; i--)//Move Fucose to the end of subtree list
 			{
 				if (_subTrees[i].GlycanType == Glycan.Type.DeHex)
 				{
-					GlycanTreeNode tmpGlycan = _subTrees[i];
+					var tmpGlycan = _subTrees[i];
 					_subTrees.Remove(tmpGlycan);
 					_subTrees.Add(tmpGlycan);
 				}
@@ -609,7 +609,7 @@ namespace COL.GlycoLib
 
 		private bool InTheMiddleOfBranch(string[] argArray, int argIdx)
 		{
-			for (int i = argIdx; i >= 0; i--)
+			for (var i = argIdx; i >= 0; i--)
 			{
 				if (argArray[i].StartsWith("("))
 				{
@@ -625,13 +625,13 @@ namespace COL.GlycoLib
 
 		private bool IsTwoGlycanConnect(string argParentNodeID, string argChildNodeID)
 		{
-			int ParentID = Convert.ToInt32(argParentNodeID.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
-			int ChildID = Convert.ToInt32(argChildNodeID.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
-			foreach (GlycanTreeNode t in FetchAllGlycanNode())
+			var ParentID = Convert.ToInt32(argParentNodeID.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
+			var ChildID = Convert.ToInt32(argChildNodeID.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
+			foreach (var t in FetchAllGlycanNode())
 			{
 				if (t.NodeID == ParentID && t.Subtrees != null)
 				{
-					foreach (GlycanTreeNode child in t.Subtrees)
+					foreach (var child in t.Subtrees)
 					{
 						if (child.NodeID == ChildID)
 						{
@@ -645,13 +645,13 @@ namespace COL.GlycoLib
 
 		private bool IsTwoGlycanHaveSameParent(string argChildNodeID1, string argChildNodeID2)
 		{
-			int CID1 = Convert.ToInt32(argChildNodeID1.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
-			int CID2 = Convert.ToInt32(argChildNodeID2.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
-			foreach (GlycanTreeNode t in FetchAllGlycanNode())
+			var CID1 = Convert.ToInt32(argChildNodeID1.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
+			var CID2 = Convert.ToInt32(argChildNodeID2.TrimStart(')').TrimStart('(').TrimStart('(').TrimStart(')'));
+			foreach (var t in FetchAllGlycanNode())
 			{
 				if (t.NodeID == CID1)
 				{
-					foreach (GlycanTreeNode child in t.Parent.Subtrees)
+					foreach (var child in t.Parent.Subtrees)
 					{
 						if (child.NodeID == CID2)
 						{
@@ -665,11 +665,11 @@ namespace COL.GlycoLib
 
 		public static GlycanTreeNode IUPACToGlycanTree(string argIUPAC)
 		{
-			int id = 1;
-			GlycanTreeNode GTree = new GlycanTreeNode();
-			string[] glycans = argIUPAC.Replace(" ", "").Replace("??", "-").Split('-');
-			Stack TreeStake = new Stack();
-			for (int i = 0; i < glycans.Length; i++)
+			var id = 1;
+			var GTree = new GlycanTreeNode();
+			var glycans = argIUPAC.Replace(" ", "").Replace("??", "-").Split('-');
+			var TreeStake = new Stack();
+			for (var i = 0; i < glycans.Length; i++)
 			{
 				if (glycans[i].Contains(")("))
 				{
@@ -679,21 +679,21 @@ namespace COL.GlycoLib
 				}
 				else if (glycans[i].Contains("("))
 				{
-					List<GlycanTreeNode> GI = new List<GlycanTreeNode>();
+					var GI = new List<GlycanTreeNode>();
 					while (TreeStake.Count != 0 && TreeStake.Peek().ToString() != ")" && TreeStake.Peek().ToString() != "(")
 					{
 						GI.Add((GlycanTreeNode)TreeStake.Pop());
 					}
 
 					//Connect Tree
-					GlycanTreeNode ConnectedTree = GI[0];
+					var ConnectedTree = GI[0];
 					if (GI.Count == 1)
 					{
 						ConnectedTree = GI[0];
 					}
 					else
 					{
-						for (int j = 1; j < GI.Count; j++)
+						for (var j = 1; j < GI.Count; j++)
 						{
 							if (ConnectedTree.Subtrees.Count == 0)
 							{
@@ -701,7 +701,7 @@ namespace COL.GlycoLib
 							}
 							else
 							{
-								GlycanTreeNode GITree = ConnectedTree.SubTree1;
+								var GITree = ConnectedTree.SubTree1;
 								while (GITree.Subtrees.Count != 0)
 								{
 									GITree = GITree.SubTree1;
@@ -717,21 +717,21 @@ namespace COL.GlycoLib
 				}
 				else if (glycans[i].Contains(")"))
 				{
-					List<GlycanTreeNode> GILst = new List<GlycanTreeNode>();
+					var GILst = new List<GlycanTreeNode>();
 					while (TreeStake.Count != 0 && TreeStake.Peek().ToString() != ")" && TreeStake.Peek().ToString() != "(")
 					{
 						GILst.Add((GlycanTreeNode)TreeStake.Pop());
 					}
 
 					//Connect Tree
-					GlycanTreeNode ConnectedTree = GILst[0];
+					var ConnectedTree = GILst[0];
 					if (GILst.Count == 1)
 					{
 						ConnectedTree = GILst[0];
 					}
 					else
 					{
-						for (int j = 1; j < GILst.Count; j++)
+						for (var j = 1; j < GILst.Count; j++)
 						{
 							if (ConnectedTree.Subtrees.Count == 0)
 							{
@@ -739,7 +739,7 @@ namespace COL.GlycoLib
 							}
 							else
 							{
-								GlycanTreeNode GITree = ConnectedTree.SubTree1;
+								var GITree = ConnectedTree.SubTree1;
 								while (GITree.Subtrees.Count != 0)
 								{
 									GITree = GITree.SubTree1;
@@ -752,8 +752,8 @@ namespace COL.GlycoLib
 					TreeStake.Push(ConnectedTree);
 
 					TreeStake.Push(new GlycanTreeNode(Glycan.String2GlycanType(glycans[i]), id));
-					GlycanTreeNode GI = (GlycanTreeNode)TreeStake.Pop();
-					GlycanTreeNode child = (GlycanTreeNode)TreeStake.Pop();
+					var GI = (GlycanTreeNode)TreeStake.Pop();
+					var child = (GlycanTreeNode)TreeStake.Pop();
 					child.Parent = GI;
 					GI.AddGlycanSubTree(child);
 					TreeStake.Pop(); //(
@@ -781,8 +781,8 @@ namespace COL.GlycoLib
 				{
 					if (TreeStake.Count != 0 && TreeStake.Peek().ToString() != ")" && TreeStake.Peek().ToString() != "(")
 					{
-						GlycanTreeNode GI = new GlycanTreeNode(Glycan.String2GlycanType(glycans[i]), id);
-						GlycanTreeNode child = (GlycanTreeNode)TreeStake.Pop();
+						var GI = new GlycanTreeNode(Glycan.String2GlycanType(glycans[i]), id);
+						var child = (GlycanTreeNode)TreeStake.Pop();
 						child.Parent = GI;
 						GI.AddGlycanSubTree(child);
 						TreeStake.Push(GI);
@@ -804,13 +804,13 @@ namespace COL.GlycoLib
 
 		public List<string> Contain(string argIUPAC)
 		{
-			GlycanTreeNode Pattern = IUPACToGlycanTree(argIUPAC);
+			var Pattern = IUPACToGlycanTree(argIUPAC);
 			return Contain(Pattern);
 		}
 
 		public List<string> Contain(GlycanTreeNode argPattern)
 		{
-			List<string> MatchNodeId = new List<string>();
+			var MatchNodeId = new List<string>();
 			if (argPattern.NoOfTotalGlycan > this.NoOfTotalGlycan ||
 				argPattern.NoOfDeHex > this.NoOfDeHex ||
 				argPattern.NoOfHex > this.NoOfHex ||
@@ -820,12 +820,12 @@ namespace COL.GlycoLib
 			{
 				return MatchNodeId; //none match
 			}
-			string strPattern = argPattern.GetIUPACString().Replace("-)", "(-").Replace("-(", ")-").Replace("HexNAc", "NAc"); //Change order of symbol for reverse
+			var strPattern = argPattern.GetIUPACString().Replace("-)", "(-").Replace("-(", ")-").Replace("HexNAc", "NAc"); //Change order of symbol for reverse
 																															  //strPattern = "HexNAc-Hex-Hex";
 																															  //strPattern = strPattern.Replace("-)", "(-").Replace("-(", ")-").Replace("HexNAc", "NAc");
-			string[] PatternArray = strPattern.Split('-');
+			var PatternArray = strPattern.Split('-');
 			Array.Reverse(PatternArray);
-			for (int i = 0; i < PatternArray.Length; i++)
+			for (var i = 0; i < PatternArray.Length; i++)
 			{
 				if (PatternArray[i].EndsWith("("))
 				{
@@ -841,10 +841,10 @@ namespace COL.GlycoLib
 					PatternArray[i] = PatternArray[i].Insert(0, ")").TrimEnd(')');
 				}
 			}
-			string Target = GetIUPACString().Replace("-)", "(-").Replace("-(", ")-").Replace("HexNAc", "NAc");
-			string[] TargetArray = Target.Split('-');
+			var Target = GetIUPACString().Replace("-)", "(-").Replace("-(", ")-").Replace("HexNAc", "NAc");
+			var TargetArray = Target.Split('-');
 			Array.Reverse(TargetArray);
-			for (int i = 0; i < TargetArray.Length; i++)
+			for (var i = 0; i < TargetArray.Length; i++)
 			{
 				if (TargetArray[i].EndsWith("("))
 				{
@@ -860,10 +860,10 @@ namespace COL.GlycoLib
 					TargetArray[i] = TargetArray[i].Insert(0, ")").TrimEnd(')');
 				}
 			}
-			string TargetID = GetNodeIDCorrespondIUPAC().Replace("-)", "(-").Replace("-(", ")-");
-			string[] TargerIDArray = TargetID.Split('-');
+			var TargetID = GetNodeIDCorrespondIUPAC().Replace("-)", "(-").Replace("-(", ")-");
+			var TargerIDArray = TargetID.Split('-');
 			Array.Reverse(TargerIDArray);
-			for (int i = 0; i < TargerIDArray.Length; i++)
+			for (var i = 0; i < TargerIDArray.Length; i++)
 			{
 				if (TargerIDArray[i].EndsWith("("))
 				{
@@ -879,11 +879,11 @@ namespace COL.GlycoLib
 					TargerIDArray[i] = TargerIDArray[i].Insert(0, ")").TrimEnd(')');
 				}
 			}
-			Queue MatchArrayIdxQueue = new Queue();
+			var MatchArrayIdxQueue = new Queue();
 
 			//Start Point
-			string Pattern = PatternArray[0];
-			for (int i = 0; i < TargetArray.Length; i++)
+			var Pattern = PatternArray[0];
+			for (var i = 0; i < TargetArray.Length; i++)
 			{
 				if (TargetArray[i].Equals(Pattern) ||
 					 TargetArray[i].Equals("(" + Pattern) ||
@@ -898,14 +898,14 @@ namespace COL.GlycoLib
 				{
 					break; //All done
 				}
-				string structure = MatchArrayIdxQueue.Dequeue().ToString();
-				int lastTargetIdx = Convert.ToInt32(structure.Split('-')[structure.Split('-').Length - 1]);
-				int CountOfPattern = structure.Split('-').Length;
+				var structure = MatchArrayIdxQueue.Dequeue().ToString();
+				var lastTargetIdx = Convert.ToInt32(structure.Split('-')[structure.Split('-').Length - 1]);
+				var CountOfPattern = structure.Split('-').Length;
 
 				Pattern = PatternArray[CountOfPattern];
 				if (Pattern.Contains("(") || Pattern.Contains(")"))
 				{
-					for (int j = lastTargetIdx + 1; j < TargetArray.Length; j++)
+					for (var j = lastTargetIdx + 1; j < TargetArray.Length; j++)
 					{
 						if (TargetArray[j].Equals(Pattern))
 						{
@@ -918,7 +918,7 @@ namespace COL.GlycoLib
 				}
 				else
 				{
-					for (int j = lastTargetIdx + 1; j < TargetArray.Length; j++)
+					for (var j = lastTargetIdx + 1; j < TargetArray.Length; j++)
 					{
 						if ((TargetArray[j].Equals(Pattern) && j == lastTargetIdx + 1) || //Must be next pattern
 							(TargetArray[j].Equals("(" + Pattern) && TargetArray[lastTargetIdx + 1].Contains("(")) ||
@@ -944,17 +944,17 @@ namespace COL.GlycoLib
 
 		private bool IsChildGlycanPatternConatinInStructure(GlycanTreeNode argStructure, GlycanTreeNode argPattern)
 		{
-			int[] StructureCounter = new int[] { 0, 0, 0, 0, 0 };
-			int[] PatternCounter = new int[] { 0, 0, 0, 0, 0 };
-			foreach (GlycanTreeNode Child in argStructure.Subtrees)
+			var StructureCounter = new[] { 0, 0, 0, 0, 0 };
+			var PatternCounter = new[] { 0, 0, 0, 0, 0 };
+			foreach (var Child in argStructure.Subtrees)
 			{
 				StructureCounter[(int)Child.GlycanType]++;
 			}
-			foreach (GlycanTreeNode Child in argPattern.Subtrees)
+			foreach (var Child in argPattern.Subtrees)
 			{
 				PatternCounter[(int)Child.GlycanType]++;
 			}
-			for (int i = 0; i < 5; i++)
+			for (var i = 0; i < 5; i++)
 			{
 				if (StructureCounter[i] < PatternCounter[i])
 				{
@@ -1050,16 +1050,16 @@ namespace COL.GlycoLib
 		public List<GlycanTreeNode> GetListsofGlycanTree()
 		{
 			//Iterative
-			List<GlycanTreeNode> lstGlycansT = new List<GlycanTreeNode>();
-			Stack<GlycanTreeNode> stackTreeNode = new Stack<GlycanTreeNode>();
+			var lstGlycansT = new List<GlycanTreeNode>();
+			var stackTreeNode = new Stack<GlycanTreeNode>();
 			stackTreeNode.Push(this);
 			do
 			{
-				GlycanTreeNode node = stackTreeNode.Pop();
+				var node = stackTreeNode.Pop();
 				lstGlycansT.Add(node);
 				if (node._subTrees != null)
 				{
-					foreach (GlycanTreeNode subtree in node._subTrees)
+					foreach (var subtree in node._subTrees)
 					{
 						if (subtree._subTrees == null)
 						{
@@ -1109,12 +1109,12 @@ namespace COL.GlycoLib
 
 		public float GetMonoMassForGlycanTree(GlycanTreeNode argTree)
 		{
-			float SUM = 0.0f;
+			var SUM = 0.0f;
 			SUM = argTree.NoOfDeHex * GlycanMass.GetGlycanMass(Glycan.Type.DeHex);
-			SUM = SUM + argTree.NoOfHex * GlycanMass.GetGlycanMass(Glycan.Type.Hex);
-			SUM = SUM + argTree.NoOfHexNac * GlycanMass.GetGlycanMass(Glycan.Type.HexNAc);
-			SUM = SUM + argTree.NoOfNeuAc * GlycanMass.GetGlycanMass(Glycan.Type.NeuAc);
-			SUM = SUM + argTree.NoOfNeuGc * GlycanMass.GetGlycanMass(Glycan.Type.NeuGc);
+			SUM += argTree.NoOfHex * GlycanMass.GetGlycanMass(Glycan.Type.Hex);
+			SUM += argTree.NoOfHexNac * GlycanMass.GetGlycanMass(Glycan.Type.HexNAc);
+			SUM += argTree.NoOfNeuAc * GlycanMass.GetGlycanMass(Glycan.Type.NeuAc);
+			SUM += argTree.NoOfNeuGc * GlycanMass.GetGlycanMass(Glycan.Type.NeuGc);
 			return SUM;
 		}
 
@@ -1135,9 +1135,9 @@ namespace COL.GlycoLib
 
 		private string GenerateIUPACStringFromRoot(bool argWithID)
 		{
-			List<string> PrintOutID = new List<string>();
-			string tmpStr = "";
-			GlycanTreeNode StartNode = this;
+			var PrintOutID = new List<string>();
+			var tmpStr = "";
+			var StartNode = this;
 
 			while (StartNode.Parent != null)
 			{
@@ -1158,7 +1158,7 @@ namespace COL.GlycoLib
 					else
 					{
 						string ChildandParent;
-						string PID = GN.NodeID.ToString("00") + "," + GN.GlycanType.ToString();
+						var PID = GN.NodeID.ToString("00") + "," + GN.GlycanType.ToString();
 						ChildandParent = PID + "-";
 
 						if (GN.Subtrees.Count == 1)
@@ -1172,7 +1172,7 @@ namespace COL.GlycoLib
 						}
 						else
 						{
-							for (int i = GN.Subtrees.Count - 1; i > 0; i--)
+							for (var i = GN.Subtrees.Count - 1; i > 0; i--)
 							{
 								if (GN.Subtrees[i].NodeID > this.NodeID)
 								{
@@ -1213,7 +1213,7 @@ namespace COL.GlycoLib
 						}
 						else
 						{
-							for (int i = GN.Subtrees.Count - 1; i > 0; i--)
+							for (var i = GN.Subtrees.Count - 1; i > 0; i--)
 							{
 								if (GN.Subtrees[i].NodeID > this.NodeID)
 								{
@@ -1242,9 +1242,9 @@ namespace COL.GlycoLib
 
 		private string GenerateIUPACString(bool argWithID)
 		{
-			List<string> PrintOutID = new List<string>();
-			string tmpStr = "";
-			GlycanTreeNode StartNode = this;
+			var PrintOutID = new List<string>();
+			var tmpStr = "";
+			var StartNode = this;
 
 			foreach (GlycanTreeNode GN in StartNode.TravelGlycanTreeBFS())
 			{
@@ -1257,7 +1257,7 @@ namespace COL.GlycoLib
 					else
 					{
 						string ChildandParent;
-						string PID = GN.NodeID.ToString("00") + "," + GN.GlycanType.ToString();
+						var PID = GN.NodeID.ToString("00") + "," + GN.GlycanType.ToString();
 						ChildandParent = PID + "-";
 
 						if (GN.Subtrees.Count == 1)
@@ -1267,7 +1267,7 @@ namespace COL.GlycoLib
 						}
 						else
 						{
-							for (int i = GN.Subtrees.Count - 1; i > 0; i--)
+							for (var i = GN.Subtrees.Count - 1; i > 0; i--)
 							{
 								ChildandParent = "(" + GN.Subtrees[i].NodeID.ToString("00") + "," + GN.Subtrees[i].GlycanType.ToString() + "-)" + ChildandParent;
 								PrintOutID.Add(GN.Subtrees[i].NodeID.ToString("00"));
@@ -1296,7 +1296,7 @@ namespace COL.GlycoLib
 						}
 						else
 						{
-							for (int i = GN.Subtrees.Count - 1; i > 0; i--)
+							for (var i = GN.Subtrees.Count - 1; i > 0; i--)
 							{
 								tmpStr = "(" + GN.Subtrees[i].NodeID.ToString("00") + "," + GN.Subtrees[i].GlycanType.ToString() + "-)" + tmpStr;
 								PrintOutID.Add(GN.Subtrees[i].NodeID.ToString("00"));
@@ -1547,11 +1547,11 @@ namespace COL.GlycoLib
 
 		public string GetNodeIDCorrespondIUPAC()
 		{
-			string strTree = "";
-			string strSub1 = "";
-			string strSub2 = "";
-			string strSub3 = "";
-			string strSub4 = "";
+			var strTree = "";
+			var strSub1 = "";
+			var strSub2 = "";
+			var strSub3 = "";
+			var strSub4 = "";
 			if (this.SubTree1 != null)
 			{
 				strSub1 = this.SubTree1.GetNodeIDCorrespondIUPAC() + "-";
@@ -1581,7 +1581,7 @@ namespace COL.GlycoLib
 
 		public List<GlycanTreeNode> FetchAllGlycanNode()
 		{
-			List<GlycanTreeNode> tmpList = new List<GlycanTreeNode>();
+			var tmpList = new List<GlycanTreeNode>();
 			tmpList.Add(this);
 
 			if (this.SubTree1 != null)
@@ -1605,14 +1605,14 @@ namespace COL.GlycoLib
 
 		public bool RemoveGlycan(GlycanTreeNode argRemove)
 		{
-			bool _found = false;
-			int TargetParentLevel = argRemove.DistanceRoot - 1;
+			var _found = false;
+			var TargetParentLevel = argRemove.DistanceRoot - 1;
 			if (TargetParentLevel < 0)
 			{
 				return false;
 			}
-			GlycanTreeNode parent = this;
-			Stack _ChildStack = new Stack();
+			var parent = this;
+			var _ChildStack = new Stack();
 			while (_found != true)
 			{
 				if (parent.DistanceRoot < TargetParentLevel)
@@ -1623,7 +1623,7 @@ namespace COL.GlycoLib
 					}
 					else if (parent.GetChildren() != null && parent.GetChildren().Count > 1) //Two or more branch push the other into stack
 					{
-						for (int i = 1; i < parent.GetChildren().Count; i++)
+						for (var i = 1; i < parent.GetChildren().Count; i++)
 						{
 							_ChildStack.Push(parent.GetChildren()[i]);
 						}
@@ -1672,14 +1672,14 @@ namespace COL.GlycoLib
 
 		private GlycanTreeNode ConnectTree(List<GlycanTreeNode> argList)
 		{
-			GlycanTreeNode Tree = argList[0];
+			var Tree = argList[0];
 			if (argList.Count == 1)
 			{
 				return argList[0];
 			}
 			else
 			{
-				for (int i = 1; i < argList.Count; i++)
+				for (var i = 1; i < argList.Count; i++)
 				{
 					if (Tree.Subtrees.Count == 0)
 					{
@@ -1687,7 +1687,7 @@ namespace COL.GlycoLib
 					}
 					else
 					{
-						GlycanTreeNode GI = Tree.SubTree1;
+						var GI = Tree.SubTree1;
 						while (GI.Subtrees.Count != 0)
 						{
 							GI = GI.SubTree1;
@@ -1706,8 +1706,8 @@ namespace COL.GlycoLib
 		/// <returns></returns>
 		private List<KeyValuePair<int, int>> FindOrder(int[] argInput)
 		{
-			List<KeyValuePair<int, int>> myList = new List<KeyValuePair<int, int>>();
-			for (int i = 0; i < argInput.Length; i++)
+			var myList = new List<KeyValuePair<int, int>>();
+			for (var i = 0; i < argInput.Length; i++)
 			{
 				myList.Add(new KeyValuePair<int, int>(i, argInput[i]));
 			}

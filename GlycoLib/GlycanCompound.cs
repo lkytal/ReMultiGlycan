@@ -61,12 +61,12 @@ namespace COL.GlycoLib
 		{
 			get
 			{
-				float TotalMass = 0;
-				foreach (Tuple<string, float, int> adduct in Adducts)
+				float totalMass = 0;
+				foreach (var adduct in Adducts)
 				{
-					TotalMass = TotalMass + adduct.Item2 * adduct.Item3;
+					totalMass += adduct.Item2 * adduct.Item3;
 				}
-				return TotalMass;
+				return totalMass;
 			}
 		}
 
@@ -76,33 +76,27 @@ namespace COL.GlycoLib
 			{
 				CalcAtom();
 				CalcMass();
-				if (Charge != 0)
-				{
-					if (_PositiveCharge)
-					{
-						return (_MonoMass + AdductMass) / (double)Charge;
-					}
-					else
-					{
-						Tuple<string, float, int> Proton = Adducts.Where(x => x.Item1 == "H").ToArray()[0];
-						return (_MonoMass - Proton.Item2 * Proton.Item3) / (double)Proton.Item3;
-					}
-				}
-				else
-				{
-					return _MonoMass;
-				}
-			}
+                if (Charge == 0) return _MonoMass;
+
+                if (_PositiveCharge)
+                {
+                    return (_MonoMass + AdductMass) / (double)Charge;
+                }
+
+                var proton = Adducts.Where(x => x.Item1 == "H").ToArray()[0];
+
+                return (_MonoMass - proton.Item2 * proton.Item3) / (double)proton.Item3;
+            }
 		}
 
 		public int Charge
 		{
 			get
 			{
-				int _charge = 0;
-				foreach (Tuple<string, float, int> adduct in Adducts)
+				var _charge = 0;
+				foreach (var adduct in Adducts)
 				{
-					_charge = _charge + adduct.Item3;
+					_charge += adduct.Item3;
 				}
 				return _charge;
 			}
@@ -170,16 +164,14 @@ namespace COL.GlycoLib
 		public int NumOfPermethlationSites
 		{
 			get
-			{
-				if (!isHuman) //NeuGc has 6 permeth sites
+            {
+                if (!isHuman) //NeuGc has 6 permeth sites
 				{
 					return NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6;
 				}
-				else
-				{
-					return NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5;
-				}
-			}
+
+                return NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5;
+            }
 		}
 
 		public double MonoMass
@@ -267,22 +259,20 @@ namespace COL.GlycoLib
 		public string GlycanKey
 		{
 			get
-			{
-				if (_Human)
+            {
+                if (_Human)
 				{
-					return NoOfHexNAc.ToString() + "-" +
-			   NoOfHex.ToString() + "-" +
-			   NoOfDeHex.ToString() + "-" +
-			   NoOfSia.ToString() + "-0";
+					return NoOfHexNAc + "-" +
+						NoOfHex + "-" +
+						NoOfDeHex + "-" +
+						NoOfSia + "-0";
 				}
-				else
-				{
-					return NoOfHexNAc.ToString() + "-" +
-				   NoOfHex.ToString() + "-" +
-				   NoOfDeHex.ToString() + "-0-" +
-				   NoOfSia.ToString();
-				}
-			}
+
+                return NoOfHexNAc + "-" +
+                       NoOfHex + "-" +
+                       NoOfDeHex + "-0-" +
+                       NoOfSia;
+            }
 		}
 
 		public bool IsGlycanWithInLinearRegLCTime(float argTotalLCTime, float argTolrenaceTime, float argIdentifiedTime)
@@ -292,7 +282,7 @@ namespace COL.GlycoLib
 			//    return false;
 			//}
 
-			float expectedTime = _LinearRegSlope * argTotalLCTime + _LinearRegIntercept;
+			var expectedTime = _LinearRegSlope * argTotalLCTime + _LinearRegIntercept;
 			if (Math.Abs(expectedTime - argIdentifiedTime) / argTotalLCTime <= argTolrenaceTime)
 			{
 				return true;
@@ -328,31 +318,33 @@ namespace COL.GlycoLib
 
 				if (_Human)
 				{
-					Carbon = Carbon + 16 * NoOfSia;
-					Hydrogen = Hydrogen + 27 * NoOfSia;
-					Oxygen = Oxygen + 8 * NoOfSia;
+					Carbon += 16 * NoOfSia;
+					Hydrogen += 27 * NoOfSia;
+					Oxygen += 8 * NoOfSia;
 				}
 				else
 				{
-					Carbon = Carbon + 17 * NoOfSia;
-					Hydrogen = Hydrogen + 29 * NoOfSia;
-					Oxygen = Oxygen + 9 * NoOfSia;
+					Carbon += 17 * NoOfSia;
+					Hydrogen += 29 * NoOfSia;
+					Oxygen += 9 * NoOfSia;
 				}
-				//Nonreducing end  -CH3
-				Carbon = Carbon + 1;
-				Hydrogen = Hydrogen + 3;
+				
+                //Nonreducing end  -CH3
+				Carbon += 1;
+				Hydrogen += 3;
 				if (isReducedReducingEnd) //C2OH7
 				{
-					Carbon = Carbon + 2;
-					Oxygen = Oxygen + 1;
-					Hydrogen = Hydrogen + 7;
+					Carbon += 2;
+					Oxygen += 1;
+					Hydrogen += 7;
 				}
 				else //COH3
 				{
-					Carbon = Carbon + 1;
-					Oxygen = Oxygen + 1;
-					Hydrogen = Hydrogen + 3;
+					Carbon += 1;
+					Oxygen += 1;
+					Hydrogen += 3;
 				}
+
 				//Labeling
 				switch (_LabelingTag)
 				{
@@ -360,12 +352,12 @@ namespace COL.GlycoLib
 						if (_Human)
 						{
 							Deuterium = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3; //3: 1 NonReducing End  + 2 ReducedReducing End
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 						}
 						else
 						{
 							Deuterium = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 						}
 						break;
 
@@ -373,12 +365,12 @@ namespace COL.GlycoLib
 						if (_Human)
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3) * 2;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 						}
 						else
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3) * 2;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 						}
 						break;
 
@@ -386,12 +378,12 @@ namespace COL.GlycoLib
 						if (_Human)
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3) * 3;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 						}
 						else
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3) * 3;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 						}
 						break;
 
@@ -400,13 +392,13 @@ namespace COL.GlycoLib
 						{
 							Deuterium = 0;
 							Carbon13 = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3;
-							Carbon = Carbon - Carbon13;
+							Carbon -= Carbon13;
 						}
 						else
 						{
 							Deuterium = 0;
 							Carbon13 = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3;
-							Carbon = Carbon - Carbon13;
+							Carbon -= Carbon13;
 						}
 						break;
 
@@ -414,16 +406,16 @@ namespace COL.GlycoLib
 						if (_Human)
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3) * 2;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 							Carbon13 = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3;
-							Carbon = Carbon - Carbon13;
+							Carbon -= Carbon13;
 						}
 						else
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3) * 2;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 							Carbon13 = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3;
-							Carbon = Carbon - Carbon13;
+							Carbon -= Carbon13;
 						}
 						break;
 
@@ -431,16 +423,16 @@ namespace COL.GlycoLib
 						if (_Human)
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3) * 3;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 							Carbon13 = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 5 + 3;
-							Carbon = Carbon - Carbon13;
+							Carbon -= Carbon13;
 						}
 						else
 						{
 							Deuterium = (NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3) * 3;
-							Hydrogen = Hydrogen - Deuterium;
+							Hydrogen -= Deuterium;
 							Carbon13 = NoOfHex * 3 + NoOfHexNAc * 3 + NoOfDeHex * 2 + NoOfSia * 6 + 3;
-							Carbon = Carbon - Carbon13;
+							Carbon -= Carbon13;
 						}
 						break;
 				}
@@ -454,27 +446,27 @@ namespace COL.GlycoLib
 
 				if (_Human)
 				{
-					Carbon = Carbon + 11 * NoOfSia;
-					Hydrogen = Hydrogen + 17 * NoOfSia;
-					Oxygen = Oxygen + 8 * NoOfSia;
+					Carbon += 11 * NoOfSia;
+					Hydrogen += 17 * NoOfSia;
+					Oxygen += 8 * NoOfSia;
 				}
 				else
 				{
-					Carbon = Carbon + 11 * NoOfSia;
-					Hydrogen = Hydrogen + 17 * NoOfSia;
-					Oxygen = Oxygen + 9 * NoOfSia;
+					Carbon += 11 * NoOfSia;
+					Hydrogen += 17 * NoOfSia;
+					Oxygen += 9 * NoOfSia;
 				}
 				//Nonreducing end -H
-				Hydrogen = Hydrogen + 1;
+				Hydrogen += 1;
 				if (isReducedReducingEnd) //OH3
 				{
-					Oxygen = Oxygen + 1;
-					Hydrogen = Hydrogen + 3;
+					Oxygen += 1;
+					Hydrogen += 3;
 				}
 				else //OH
 				{
-					Oxygen = Oxygen + 1;
-					Hydrogen = Hydrogen + 1;
+					Oxygen += 1;
+					Hydrogen += 1;
 				}
 				switch (_LabelingTag)
 				{
@@ -487,7 +479,7 @@ namespace COL.GlycoLib
 						Carbon = Carbon + 2 + (NoOfSia * 1);
 						Hydrogen = Hydrogen + 10 + (NoOfSia * 3);
 						Nitrogen = Nitrogen + 2 + (NoOfSia * 1);
-						Oxygen = Oxygen - (NoOfSia * 1);
+						Oxygen -= (NoOfSia * 1);
 						Carbon13 = 6;
 						break;
 
@@ -495,7 +487,7 @@ namespace COL.GlycoLib
 						Carbon = Carbon + 8 + (NoOfSia * 1);
 						Hydrogen = Hydrogen + 10 + (NoOfSia * 3);
 						Nitrogen = Nitrogen + 2 + (NoOfSia * 1);
-						Oxygen = Oxygen - (NoOfSia * 1);
+						Oxygen -= (NoOfSia * 1);
 						break;
 					/*HDEAT
                      * Light C11H23N7　
@@ -525,23 +517,23 @@ namespace COL.GlycoLib
 		}
 
 		public int CompareTo(object obj)
-		{
-			if (obj is GlycanCompound)
+        {
+            if (obj is GlycanCompound)
 			{
-				GlycanCompound p2 = (GlycanCompound)obj;
+				var p2 = (GlycanCompound)obj;
 				return _MonoMass.CompareTo(p2.MonoMass);
 			}
-			else
-				throw new ArgumentException("Object is not a Compound.");
-		}
+
+            throw new ArgumentException("Object is not a Compound.");
+        }
 
 		public object Clone()
 		{
-			MemoryStream ms = new MemoryStream();
-			BinaryFormatter bf = new BinaryFormatter();
+			var ms = new MemoryStream();
+			var bf = new BinaryFormatter();
 			bf.Serialize(ms, this);
 			ms.Position = 0;
-			object obj = bf.Deserialize(ms);
+			var obj = bf.Deserialize(ms);
 			ms.Close();
 			return obj;
 		}
