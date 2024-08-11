@@ -328,7 +328,7 @@ namespace COL.GlycoLib
 					Hydrogen += 29 * NoOfSia;
 					Oxygen += 9 * NoOfSia;
 				}
-				
+
                 //Nonreducing end  -CH3
 				Carbon += 1;
 				Hydrogen += 3;
@@ -490,7 +490,7 @@ namespace COL.GlycoLib
 						Oxygen -= (NoOfSia * 1);
 						break;
 					/*HDEAT
-                     * Light C11H23N7　
+                     * Light C11H23N7
                      * Heavy C11H3D20N7
                      *
                      */
