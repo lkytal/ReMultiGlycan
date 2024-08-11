@@ -63,10 +63,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/lkytal/ReMultiGlycan"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="Manufacturer" Value="Indiana University"/>
-    <ROW Property="ProductCode" Value="1033:{5C8A4AA5-349B-430C-98F0-DF0026B0A353} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{C73FE2FE-0B87-44BB-852A-6F4764A619AA} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="ReMultiGlycan"/>
-    <ROW Property="ProductVersion" Value="1.0.3" Options="32"/>
+    <ROW Property="ProductVersion" Value="1.2.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{C9BF6325-2DBF-40A9-8C78-8D42CF7AAD5E}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
